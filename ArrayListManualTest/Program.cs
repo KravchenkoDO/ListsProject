@@ -7,21 +7,31 @@ namespace ArrayListManualTest
     {
         static void Main(string[] args)
         {
-            var random = new Random();
-            MyArrayList arList = new MyArrayList();
-            for (int i = 0; i < 4; i++)
-            {
-                arList.Add(random.Next(10, 21));
-                
-            }
-            arList.Print();
-            Console.WriteLine(arList.Count());
-            arList.AddFirst(125);
-            Console.WriteLine(arList.Count());
-            arList.Print();
-            arList.Insert(3,999);
-            Console.WriteLine(arList.Count());
-            arList.Print();
+            ArrayList arrList = new ArrayList(new int [] {1,2,3,4,5,3,6,7,8,9});
+            Console.WriteLine(arrList.GetLength());
+            arrList.Print();
+
+            arrList.Add(999);
+            Console.WriteLine(arrList.GetLength());
+            arrList.Print();
+            
+            arrList.AddFirst(123);
+            Console.WriteLine(arrList.GetLength());
+            arrList.Print();
+
+            arrList.AddByIndex(4, 666);
+            Console.WriteLine(arrList.GetLength());
+            arrList.Print();
+
+            arrList.Reverse();
+            arrList.Print();
+
+            arrList.Sort(true);
+            arrList.Print();
+
+            arrList.RemoveFirstByValue(3);
+            arrList.Print();
+
         }
     }
 }
