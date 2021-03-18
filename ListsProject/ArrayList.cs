@@ -34,46 +34,78 @@ namespace ListsProject
                 _array[i] = arrayValues[i];
             }
 
-            Resize(true);
+            //Resize(true);
 
         }
 
         public void Add(int value)  // Добавление значения в конец
         {
-            if (Length == _array.Length-1)
-            {
-                Resize(true);
-            }
+            int countElements = 1;
+                Resize(true, countElements);
             _array[Length] = value;
             Length++;
         }
+        public void MoveElements(int index, int countElements)
+        {
+            if (Length + countElements >= _array.Length - 1)
+            {
+                Resize(true, countElements);
+            }
+
+                for (int i = index; i <= Length; i++)
+                {
+                     int tmp = _array[i];
+                    _array[i+1] = _array[i + countElements];
+                    
+                }
+
+                //for (int i = Length; i <= index; i--)
+                //{
+                //    _array[i] = _array[i + countElements];
+                //}
+
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ArrayList)
+            {
+                ArrayList arrayList = (ArrayList)obj;
+                if (this.Length != arrayList.Length)
+                {
+                    return false;
+                }
+                for (int i = 0; i < Length; i++)
+                {
+                    if (this._array[i] != arrayList._array[i])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                throw new Exception();
+            }
+        }
+
 
         public void AddFirst(int value) // Добавление значения в начало
         {
-            if (Length == _array.Length-1)
-            {
-                Resize(true);
-            }
+            Resize(true, 1);
 
             for (int i = Length; i >= 0; i--)
             {
                 _array[i + 1] = _array[i];
             }
             _array [0] = value;
-            Length++;
+            ++Length;
         }
 
         public void AddByIndex(int index, int value) //Добавление значения по индексу
         {
-            if (index < 0 || index > Length)
-            {
-                throw new IndexOutOfRangeException("List Index Out Of Range");
-            }
-
-            if (Length == _array.Length - 1)
-            {
-                Resize(true);
-            }
+            Resize(true, 1);
 
             for (int i = Length; i >= index; i--) //TODO: write method to provide single responsibility
             {
@@ -89,7 +121,7 @@ namespace ListsProject
         {
             if (Length < _array.Length / 2)
             {
-                Resize(false);
+                
             }
             Length--;
         }
@@ -98,7 +130,7 @@ namespace ListsProject
         {
             if (Length < _array.Length / 2)
             {
-                Resize(false);
+                
             }
             for (int i = Length+1; i > 0; i--) //TODO: write method to provide single responsibility Метод, который убирает Н элементов и из какой позиции
             {
@@ -301,16 +333,17 @@ namespace ListsProject
         /// Increase or Reduce size of list
         /// </summary>
         /// <param name="increase">if true increase list size</param>
-        private void Resize(bool increase)
+        private void Resize(bool increase, int countElements)
         {
-            int newLength;
+
+            int newLength = _array.Length + countElements;
             if (increase) 
             {
-                newLength = (int)(_array.Length * 1.33d + 1);
+                newLength = (int)(newLength * 1.33d + 1);
             }
             else
             {
-                newLength = (int)(_array.Length * 0.67d + 1);
+                newLength = (int)(newLength * 0.67d + 1);
             }
 
             int[] tmpArray = new int[newLength];
