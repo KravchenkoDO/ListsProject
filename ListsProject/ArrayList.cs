@@ -75,7 +75,7 @@ namespace ListsProject
                 Resize(true);
             }
 
-            for (int i = Length; i >= index; --i) //TODO: write method to provide single responsibility
+            for (int i = Length; i >= index; i--) //TODO: write method to provide single responsibility
             {
                 _array[i + 1] = _array[i];
             }
@@ -87,11 +87,25 @@ namespace ListsProject
 
         public void RemoveLast()//удаляет из конца списка элемент
         {
-
+            if (Length < _array.Length / 2)
+            {
+                Resize(false);
+            }
+            Length--;
         }
 
         public void RemoveFirst()//удаляет из начала списка элемент
         {
+            if (Length < _array.Length / 2)
+            {
+                Resize(false);
+            }
+            for (int i = Length+1; i > 0; i--) //TODO: write method to provide single responsibility Метод, который убирает Н элементов и из какой позиции
+            {
+                _array[i] = _array[i+1];
+            }
+
+            Length--;
 
         }
 

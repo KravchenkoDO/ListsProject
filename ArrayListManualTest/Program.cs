@@ -32,6 +32,12 @@ namespace ArrayListManualTest
             arrList.RemoveFirstByValue(3);
             arrList.Print();
 
+            arrList.RemoveFirst();
+            arrList.Print();
+
+            arrList.RemoveLast();
+            arrList.Print();
+
         }
     }
 }
