@@ -8,6 +8,20 @@ namespace ListsProject
 
         private int[] _array;
 
+        public int this[int index]   //доступ по индексу //изменение по индексу
+        {
+            get
+            {
+                if (index > Length || index < 0) throw new IndexOutOfRangeException();
+                else return _array[index];
+            }
+            set
+            {
+                if (index > Length || index < 0) throw new IndexOutOfRangeException();
+                else _array[index] = value;
+            }
+        }
+
         public ArrayList()
         {
             Length = 0;
@@ -19,8 +33,9 @@ namespace ListsProject
         {
             Length = 1;
 
-            _array = new int[11];
+            _array = new int[10];
             _array[0] = value;
+
 
         }
 
@@ -29,155 +44,129 @@ namespace ListsProject
             Length = arrayValues.Length;
 
             _array = new int[Length];
+
+            Resize();
             for (int i = 0; i < Length; i++)
             {
                 _array[i] = arrayValues[i];
             }
 
-            //Resize(true);
-
         }
 
-        public void Add(int value)  // Добавление значения в конец
+        public void Add(int value) // Добавление значения в конец
         {
-            int countElements = 1;
-                Resize(true, countElements);
+            if(Length >= _array.Length)
+            {
+                Resize();
+            }
             _array[Length] = value;
             Length++;
-        }
-        public void MoveElements(int index, int countElements)
-        {
-            if (Length + countElements >= _array.Length - 1)
-            {
-                Resize(true, countElements);
-            }
-
-                for (int i = index; i <= Length; i++)
-                {
-                     int tmp = _array[i];
-                    _array[i+1] = _array[i + countElements];
-                    
-                }
-
-                //for (int i = Length; i <= index; i--)
-                //{
-                //    _array[i] = _array[i + countElements];
-                //}
 
         }
 
-        public override bool Equals(object obj)
-        {
-            if (obj is ArrayList)
-            {
-                ArrayList arrayList = (ArrayList)obj;
-                if (this.Length != arrayList.Length)
-                {
-                    return false;
-                }
-                for (int i = 0; i < Length; i++)
-                {
-                    if (this._array[i] != arrayList._array[i])
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            else
-            {
-                throw new Exception();
-            }
-        }
 
-
-        public void AddFirst(int value) // Добавление значения в начало
-        {
-            Resize(true, 1);
-
-            for (int i = Length; i >= 0; i--)
-            {
-                _array[i + 1] = _array[i];
-            }
-            _array [0] = value;
-            ++Length;
-        }
 
         public void AddByIndex(int index, int value) //Добавление значения по индексу
         {
-            Resize(true, 1);
-
-            for (int i = Length; i >= index; i--) //TODO: write method to provide single responsibility
+            if (index > Length || index < 0)
             {
-                _array[i + 1] = _array[i];
+                throw new IndexOutOfRangeException();
             }
+            else
+            {
+                Length++;
+                if (Length >= _array.Length)
+                {
+                    Resize();
+                }
 
-            _array[index] = value;
+                MoveElements(index, Length, 1);
+                _array[index] = value;
+            }
+        }
 
-            Length++;
+        public void AddFirst(int value) // Добавление значения в начало
+        {
+            AddByIndex(0, value);
         }
 
         public void RemoveLast()//удаляет из конца списка элемент
         {
+            Length--;
             if (Length < _array.Length / 2)
             {
-                
+                Resize();
             }
-            Length--;
         }
 
         public void RemoveFirst()//удаляет из начала списка элемент
         {
-            if (Length < _array.Length / 2)
-            {
-                
-            }
-            for (int i = Length+1; i > 0; i--) //TODO: write method to provide single responsibility Метод, который убирает Н элементов и из какой позиции
-            {
-                _array[i] = _array[i+1];
-            }
-
-            Length--;
-
+            RemoveByIndex(0);
         }
 
 
         public void RemoveByIndex(int index) //удаляет из списка элемент по индексу index
         {
-
+            MoveElements(index, Length, -1);
+            Length--;
+            if (Length < _array.Length / 2)
+            {
+                Resize();
+            }
+            
         }
 
-        public void RemoveRangeFromEnd(int count) //удаляет из списка count элементов, начиная с конца
+        public void RemoveRangeFromLast(int count) //удаляет из списка count элементов, начиная с конца
         {
-
+            RemoveRangeFromIndex(Length- count, count);
         }
 
-        public void RemoveRangeFromBegin(int count) //удаляет из списка count элементов, начиная с начала
+        public void RemoveRangeFromFirst(int count) //удаляет из списка count элементов, начиная с начала
         {
-
+            if (count > Length)
+            {
+                count = Length;
+            }
+            RemoveRangeFromIndex(0,count);
         }
 
         public void RemoveRangeFromIndex(int index, int count) //удаляет из списка count элементов, начиная с индекса index
         {
+            if (count > (Length - index))
+            {
+                count = Length - (index+1);
+            }
+            Length -= count;
+            MoveElements(index, Length, -count);
+
+            if (Length <= _array.Length / 2)
+            {
+                Resize(count);
+            }
+            
+        }
+
+        public void RemoveFirstByValue(int value) //удаление по значению первого
+        {
 
         }
+
+        public void RemoveAllByValue() //удаление по значению всех
+        {
+
+        }
+
 
         public int GetLength() //Возврат длинны
         {
+            if (_array.Length == 0)
+            {
+                throw new ArgumentException("LIST is empty");
+            }
             return Length;
+           
         }
 
-        public int this[int index]   //доступ по индексу //изменение по индексу
-        {
-            get
-            {
-                return _array[index];
-            }
-            set
-            {
-                _array[index] = value;
-            }
-        }
 
         public int GetFirstIndexByValue(int value) //Возврат первый индекс по значению
         {
@@ -190,11 +179,9 @@ namespace ListsProject
             }
 
             return -1;
-
         }
 
-        public int[] Reverse() //реверс (123 -> 321)
-
+        public void Reverse() //реверс (123 -> 321)
         {
             for (int i = 0; i < Length / 2; i++)
             {
@@ -202,14 +189,13 @@ namespace ListsProject
                 _array[i] = _array[Length - 1 - i];
                 _array[Length - 1 - i] = tmp;
             }
-            return _array;
         }
 
         public int FindIndexOfMaxValue() //поиск индекс максимального элемента
         {
             int arrayIndexMaxValue = 0;
             int arrayMaxValue = _array[0];
-            for (int i = 1; i < Length; i++)
+            for (int i = 0; i < Length-1; i++)
             {
                 if (_array[i] > arrayMaxValue)
                 {
@@ -238,30 +224,15 @@ namespace ListsProject
         public int FindMaxValue() //поиск значения максимального элемента
 
         {
-            int arrayMaxValue = _array[0];
-            for (int i = 1; i < Length; i++)
-            {
-                if (_array[i] > arrayMaxValue)
-                {
-                    arrayMaxValue = _array[i];
-                }
-            }
-            return arrayMaxValue;
+            return _array[FindIndexOfMaxValue()];
         }
 
         public int FindMinValue() //поиск значения минимального элемента
 
         {
-            int arrayMinValue = _array[0];
-            for (int i = 1; i < Length; i++)
-            {
-                if (_array[i] < arrayMinValue)
-                {
-                    arrayMinValue = _array[i];
-                }
-            }
-            return arrayMinValue;
+            return _array[FindIndexOfMinValue()];
         }
+
 
         public int[] Sort(bool ascending)
         {
@@ -308,15 +279,6 @@ namespace ListsProject
             return _array;
         }
 
-        public void RemoveFirstByValue(int value) //удаление по значению первого
-        {
-
-        }
-
-        public void RemoveAllByValue() //удаление по значению всех
-        {
-
-        }
 
 
 
@@ -325,42 +287,78 @@ namespace ListsProject
         //добавление списка в начало
         //добавление списка по индексу
 
-        
 
-
-
-        /// <summary>
-        /// Increase or Reduce size of list
-        /// </summary>
-        /// <param name="increase">if true increase list size</param>
-        private void Resize(bool increase, int countElements)
+        private void Resize(int countElements = 1)
         {
-
-            int newLength = _array.Length + countElements;
-            if (increase) 
-            {
-                newLength = (int)(newLength * 1.33d + 1);
-            }
-            else
-            {
-                newLength = (int)(newLength * 0.67d + 1);
-            }
+            int newLength = (int)(Length * 1.33d + 1);
 
             int[] tmpArray = new int[newLength];
-
-            for (int i = 0; i < _array.Length; i++)
+            for (int i = 0; i < Length; i++)
             {
                 tmpArray[i] = _array[i];
             }
 
             _array = tmpArray;
         }
+        private void MoveElements(int indexFrom, int indexTo, int count)
+        {
+            if (count > 0)
+            {
+                for (int i = indexTo; (i - count) >= indexFrom; --i)
+                {
+                    _array[i] = _array[i - count];
+                }
+            }
+            else
+            {
+                for (int i = indexFrom; i < indexTo; ++i)
+                {
+                    _array[i] = _array[i - count];
+                }
+            }
 
-        public void Print() //For manual testing
+        }
+
+        public void Print()
+        {
+            this.PrintArray();
+            this.PrintList();
+        }
+        private void PrintArray() //For manual testing
         {
             for (int i = 0; i < _array.Length; i++)
             {
+                Console.WriteLine($"Array[{i}] = {_array[i]}");
+            }
+        }
+        private void PrintList() //For manual testing
+        {
+            for (int i = 0; i < Length; i++)
+            {
                 Console.WriteLine($"List<{i}> = {_array[i]}");
+            }
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj is ArrayList)
+            {
+                ArrayList arrayList = (ArrayList)obj;
+                if (this.Length != arrayList.Length)
+                {
+                    return false;
+                }
+                for (int i = 0; i < Length; i++)
+                {
+                    if (this._array[i] != arrayList._array[i])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                throw new Exception();
             }
         }
     }

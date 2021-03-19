@@ -7,15 +7,15 @@ namespace ArrayListManualTest
     {
         static void Main(string[] args)
         {
-            ArrayList arrList = new ArrayList(new int [] {1,2,3,4,5,6,7,8,9});
+            ArrayList arrList = new ArrayList(new int[] { 1, 2, 3, 4, 5, 6, 2 , 8, 9, 10 });
             Console.WriteLine(arrList.GetLength());
+
+
             arrList.Print();
 
-            arrList.MoveElements(5, 1);
-            Console.WriteLine(arrList.GetLength());
-            arrList.Print();
+            Console.WriteLine(arrList.GetFirstIndexByValue(2));
             
-
+            arrList.Print();
         }
     }
 }
