@@ -107,26 +107,29 @@ namespace ListsProject
 
         public void RemoveByIndex(int index) //удаляет из списка элемент по индексу index
         {
-            MoveElements(index, Length, -1);
-            Length--;
-            if (Length < _array.Length / 2)
+            if (index > Length || index < 0)
             {
-                Resize();
+                throw new IndexOutOfRangeException();
             }
-            
+            else
+            {
+            MoveElements(index, Length, -1);
+                Length--;
+                if (Length < _array.Length / 2)
+                {
+                    Resize();
+                }
+            }
+
         }
 
         public void RemoveRangeFromLast(int count) //удаляет из списка count элементов, начиная с конца
         {
-            RemoveRangeFromIndex(Length- count, count);
+            RemoveRangeFromIndex(Length - count, count);
         }
 
         public void RemoveRangeFromFirst(int count) //удаляет из списка count элементов, начиная с начала
         {
-            if (count > Length)
-            {
-                count = Length;
-            }
             RemoveRangeFromIndex(0,count);
         }
 
@@ -134,37 +137,50 @@ namespace ListsProject
         {
             if (count > (Length - index))
             {
-                count = Length - (index+1);
+                throw new ArgumentException("List has less elements then You want to Remove");
             }
-            Length -= count;
-            MoveElements(index, Length, -count);
-
-            if (Length <= _array.Length / 2)
+            else
             {
-                Resize(count);
+                Length -= count;
+                MoveElements(index, Length, -count);
+
+                if (Length <= _array.Length / 2)
+                {
+                    Resize(count);
+                }
             }
+            
             
         }
 
-        public void RemoveFirstByValue(int value) //удаление по значению первого
+        public int RemoveFirstByValue(int value) //удаление по значению первого
         {
-
+            int index = GetFirstIndexByValue(value);
+            RemoveByIndex(index);
+            return index;
         }
 
-        public void RemoveAllByValue() //удаление по значению всех
+        public int RemoveAllByValue(int value) //удаление по значению всех
         {
+            int count = 0;
+            int index = 0;
+            while (index != -1)
+            {
+                index = GetFirstIndexByValue(value);
+                if (index > 0)
+                {
+                    RemoveByIndex(index);
+                    count++;
+                }
+            }
 
+            return count;
         }
 
 
         public int GetLength() //Возврат длинны
         {
-            if (_array.Length == 0)
-            {
-                throw new ArgumentException("LIST is empty");
-            }
             return Length;
-           
         }
 
 

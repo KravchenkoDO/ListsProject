@@ -7,13 +7,14 @@ namespace ArrayListManualTest
     {
         static void Main(string[] args)
         {
-            ArrayList arrList = new ArrayList(new int[] { 1, 2, 3, 4, 5, 6, 2 , 8, 9, 10 });
+            ArrayList arrList = new ArrayList(new int[] {0, 1, 2, 3, 4, 2, 6, 7 , 2, 9, 10 });
             Console.WriteLine(arrList.GetLength());
 
 
             arrList.Print();
 
-            Console.WriteLine(arrList.GetFirstIndexByValue(2));
+            Console.WriteLine(arrList.RemoveAllByValue(2));
+            //arrList.RemoveRangeFromFirst(8);
             
             arrList.Print();
         }
