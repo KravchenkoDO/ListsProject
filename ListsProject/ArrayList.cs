@@ -92,71 +92,102 @@ namespace ListsProject
 
         public void RemoveLast()//удаляет из конца списка элемент
         {
-            Length--;
-            if (Length < _array.Length / 2)
-            {
-                Resize();
-            }
-        }
-
-        public void RemoveFirst()//удаляет из начала списка элемент
-        {
-            RemoveByIndex(0);
-        }
-
-
-        public void RemoveByIndex(int index) //удаляет из списка элемент по индексу index
-        {
-            if (index > Length || index < 0)
+            if (Length == 0)
             {
                 throw new IndexOutOfRangeException();
             }
             else
             {
-            MoveElements(index, Length, -1);
                 Length--;
                 if (Length < _array.Length / 2)
                 {
                     Resize();
                 }
             }
+        }
+
+        public void RemoveFirst() //удаляет из начала списка элемент
+        {
+            if (Length == 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else
+            {
+                RemoveByIndex(0);
+            }
+        }
+
+
+        public void RemoveByIndex(int index) //удаляет из списка элемент по индексу index
+        {
+            if (index > (Length - 1) || index < 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            MoveElements(index, Length, -1);
+            Length--;
+            if (Length < _array.Length / 2)
+            {
+                Resize();
+            }
 
         }
 
         public void RemoveRangeFromLast(int count) //удаляет из списка count элементов, начиная с конца
         {
-            RemoveRangeFromIndex(Length - count, count);
+            if (count > Length || count < 0)
+            {
+                throw new ArgumentException("Count must be greater then 0 or less then list Length");
+            }
+
+            if (count != 0)
+            {
+                RemoveRangeFromIndex(Length - count, count);
+            }
         }
 
         public void RemoveRangeFromFirst(int count) //удаляет из списка count элементов, начиная с начала
         {
-            RemoveRangeFromIndex(0,count);
+            if (count > Length || count < 0)
+            {
+                throw new ArgumentException("Count must be greater then 0 or less then list Length");
+            }
+
+            RemoveRangeFromIndex(0, count);
         }
 
-        public void RemoveRangeFromIndex(int index, int count) //удаляет из списка count элементов, начиная с индекса index
+        public void
+            RemoveRangeFromIndex(int index, int count) //удаляет из списка count элементов, начиная с индекса index
         {
-            if (count > (Length - index))
+            if (index > (Length - 1) || index < 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            if (count > (Length - index) || count < 0)
             {
                 throw new ArgumentException("List has less elements then You want to Remove");
             }
-            else
-            {
-                Length -= count;
-                MoveElements(index, Length, -count);
 
-                if (Length <= _array.Length / 2)
-                {
-                    Resize(count);
-                }
+            Length -= count;
+            MoveElements(index, Length, -count);
+
+            if (Length <= _array.Length / 2)
+            {
+                Resize(count);
             }
-            
-            
         }
 
         public int RemoveFirstByValue(int value) //удаление по значению первого
         {
             int index = GetFirstIndexByValue(value);
-            RemoveByIndex(index);
+            if (index >= 0)
+            {
+                RemoveByIndex(index);
+            }
+            
             return index;
         }
 
@@ -164,13 +195,18 @@ namespace ListsProject
         {
             int count = 0;
             int index = 0;
-            while (index != -1)
+            bool find = true;
+            while (find == true)
             {
                 index = GetFirstIndexByValue(value);
-                if (index > 0)
+                if (index >= 0)
                 {
                     RemoveByIndex(index);
                     count++;
+                }
+                else
+                {
+                    find = false;
                 }
             }
 
@@ -376,6 +412,11 @@ namespace ListsProject
             {
                 throw new Exception();
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }
