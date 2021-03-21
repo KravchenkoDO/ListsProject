@@ -246,72 +246,80 @@ namespace ListsProject.Tests
             Assert.AreEqual(expected, actual);
         }
 
+        [TestCase(new[] {1, 2, 3, 4}, new[] {4, 3, 2, 1})]
+        [TestCase(new[] {1, 2, 5, 3, 4}, new[] {4, 3, 5, 2, 1})]
+        [TestCase(new[] {1}, new[] {1})]
+        [TestCase(new[] {0}, new[] {0})]
+        public void Reverse_WhenArrayList_ReversedArrayListReturned(int[] input, int[] output)
+        {
+            ArrayList actual = new ArrayList(input);
+            actual.Reverse();
+            ArrayList expected = new ArrayList(output);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            Assert.AreEqual(expected, actual);
+        }
         
 
-
-
-
-        // max index 
-        
         [TestCase(new[] { 1, 10, 5 }, 1)]
-        public void FindIndexOfMaxValue_WhenFindListMaxValue_IndexOfMaxValueReturned(int[] actual, int expected)
+        [TestCase(new[] { 1, 10, 5, 14, 999 }, 4)]
+        [TestCase(new[] { 0 }, 0)]
+        public void FindIndexOfMaxValue_WhenFindListMaxValue_IndexOfMaxValueReturned(int[] input, int expected)
         {
-            ArrayList a = new ArrayList(actual);
-            int index = a.FindIndexOfMaxValue();
-            Assert.AreEqual(index, expected);
+            ArrayList arrayList = new ArrayList(input);
+            int actual = arrayList.FindIndexOfMaxValue();
+
+            Assert.AreEqual(expected, actual);
         }
 
-        // min index 
-        
-        [TestCase(new[] { 1, 2, 3, 4 }, 0)]
-        [TestCase(new[] { 1, 2, 3, 4, 6, 7, 8 }, 0)]
-        [TestCase(new[] { 55, 10, 5 }, 2)]
-        public void FindIndexOfMinValue_WhenFindListMinValue_IndexOfMinValueReturned(int[] actual, int expected)
-        {
-            ArrayList a = new ArrayList(actual);
-            int index = a.FindIndexOfMinValue();
-            Assert.AreEqual(index, expected);
-        }
 
-        // max value 
-        
-        [TestCase(new[] { 1, 10, 5 }, 10)]
+        [TestCase(new[] { 1, 10, 15 }, 15)]
         [TestCase(new[] { 1, 15, 15 }, 15)]
-        [TestCase(new[] { 1, 10, 5, 1}, 10)]
-        public void FindMaxValue_WhenArrayLists_IntOfMaxValue(int[] actual, int expected)
+        [TestCase(new[] { 1, 10, 5, 1 }, 10)]
+        [TestCase(new[] { 0 }, 0)]
+
+        public void FindMaxValue_WhenArrayListHasElements_MaxValueReturned(int[] input, int expected)
         {
-            ArrayList a = new ArrayList(actual);
-            int value = a.FindMaxValue();
-            Assert.AreEqual(value, expected);
+            ArrayList arrayList = new ArrayList(input);
+            int actual = arrayList.FindMaxValue();
+
+            Assert.AreEqual(expected, actual);
         }
 
-        // min value
-        
         [TestCase(new[] { 1, 2, 3, 4 }, 0)]
         [TestCase(new[] { 1, 2, 3, 4, 6, 7, 8 }, 0)]
         [TestCase(new[] { 55, 10, 5 }, 2)]
-        public void FindMinValue_WhenArrayLists_IntOfMinValue(int[] actual, int expected)
+        public void FindIndexOfMinValue_WhenFindListMinValue_IndexOfMinValueReturned(int[] input, int expected)
         {
-            ArrayList a = new ArrayList(actual);
-            int value = a.FindIndexOfMinValue();
-            Assert.AreEqual(value, expected);
+            ArrayList arrayList = new ArrayList(input);
+            int actual = arrayList.FindIndexOfMinValue();
+            Assert.AreEqual(expected, actual);
+        }
+
+        
+        [TestCase(new[] { 1, 2, 3, 4 }, 1)]
+        [TestCase(new[] { 1, 2, 3, 4, 3, 7, 0 }, 0)]
+        [TestCase(new[] { 55, 10, 5 }, 5)]
+        public void FindMinValue_WhenArrayListHasElements_MinValueReturned(int[] input, int expected)
+        {
+            ArrayList arrayList = new ArrayList(input);
+            int actual = arrayList.FindMinValue();
+            Assert.AreEqual(expected, actual );
+        }
+
+        [TestCase(new[] {1, 3, 5, 7, 8}, false,new[] {8, 7, 5, 3, 1})]
+        [TestCase(new[] { 8, 7, 5, 3, 1 }, false, new[] {8, 7, 5, 3, 1})]
+        [TestCase(new []{1}, false,new []{1})]
+        [TestCase(new[] { 1 }, true, new[] { 1 })]
+        [TestCase(new[] { 1, 3, 5, 7, 8 }, true, new[] { 1, 3, 5, 7, 8 })]
+        [TestCase(new[] { 8, 7, 5, 3, 1 }, true, new[] { 1, 3, 5, 7, 8 })]
+
+        public void SortTests_WhenArrayList_SortedArrayListByDescendingReturned(int[] input, bool ascending, int[] output)
+        {
+            ArrayList actual = new ArrayList(input);
+            ArrayList expected = new ArrayList(output);
+            actual.Sort(ascending);
+
+            Assert.AreEqual(expected, actual);
         }
     }
 }

@@ -247,7 +247,7 @@ namespace ListsProject
         {
             int arrayIndexMaxValue = 0;
             int arrayMaxValue = _array[0];
-            for (int i = 0; i < Length-1; i++)
+            for (int i = 0; i < Length; i++)
             {
                 if (_array[i] > arrayMaxValue)
                 {
