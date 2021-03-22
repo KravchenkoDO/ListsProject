@@ -7,10 +7,11 @@ namespace ListsProjectManualTests
     {
         static void Main()
         {
-            ArrayList arrList = new ArrayList(new [] {1, 2, 3, 4, 6});
-            ArrayList arrList2 = new ArrayList(new []{ 1, 2, 6 });
-            arrList.AddListByIndex(2,arrList2);
-            arrList.Print();
+            Node firstNode = new Node(4);
+            firstNode.AddToEnd(11);
+            firstNode.AddToEnd(15);
+            firstNode.AddToEnd(1);
+            firstNode.Print();
 
         }
     }
