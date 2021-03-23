@@ -6,45 +6,19 @@ namespace ListsProject
 {
     public class Node
     {
-        public int data;
-        public Node next;
+        public int Data;
 
-        public Node ()
+        public Node Next;
+
+        public Node()
         {
-            data = 0;
-            next = null;
+            Data = 0;
+            Next = null;
         }
-        public Node (int i)
+        public Node(int value)
         {
-            data = i;
-
-            next = null;
-        }
-
-        public void Print()
-        {
-            Console.Write("|" + data + "|=>");
-            if (next != null)
-            {
-                next.Print();
-            }
-        }
-
-        public void AddToEnd(int data)
-        {
-            if (next == null)
-            {
-                next = new Node(data);
-            }
-            else
-            {
-                next.AddToEnd(data);
-            }
-        }
-
-        public void setNextNode (Node node)
-        {
-
+            Data = value;
+            Next = null;
         }
     }
 }
