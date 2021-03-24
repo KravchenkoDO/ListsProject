@@ -103,12 +103,12 @@ namespace ListsProject.Tests
         [TestCase(new[] { 1, 2, 3, 4, 6, 7, 8 }, 7, 5)]
         [TestCase(new[] { 1 }, 1, 0)]
         [TestCase(new[] { 1, 1, 2, 3, 4, 6, 7, 8 }, 9, -1)]
-        public void GetFirstIndexByValueTests_WhenArrayListsContainValues_IndexOfFirstFoundValueReturned(int[] input,
+        public void GetFirstIndexByValueTests_WhensingleLinkedListsContainValues_IndexOfFirstFoundValueReturned(int[] input,
             int value, int expected)
         {
-            SingleLinkedList arrayList = new SingleLinkedList(input);
+            SingleLinkedList singleLinkedList = new SingleLinkedList(input);
 
-            int actual = arrayList.GetFirstIndexByValue(value);
+            int actual = singleLinkedList.GetFirstIndexByValue(value);
 
             Assert.AreEqual(expected, actual);
         }
@@ -160,6 +160,47 @@ namespace ListsProject.Tests
             Assert.AreEqual(expected, actual);
         }
 
+
+
+        [TestCase(new[] { 1, 10, 5 }, new [] {1,10})]
+        [TestCase(new[] { 1, 10, 5, 14, 999 }, new[] { 4, 999 })]
+        [TestCase(new[] { 0 }, new[] { 0, 0 })]
+        public void FindMaxValueAndItIndexTests_WhenFindListMaxValue_IndexOfMaxValueReturned(int[] input, int[] expected)
+        {
+            SingleLinkedList singleLinkedList = new SingleLinkedList(input);
+            int [] actual = singleLinkedList.FindMaxValueAndItIndex();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        [TestCase(new[] { 4, 1, 15 }, new[] { 1, 1 })]
+        [TestCase(new[] { 1, 15, 0 }, new[] { 2, 0 })]
+        [TestCase(new[] { 1, 10, 5, 1 }, new[] { 0, 1 })]
+        [TestCase(new[] { 0 }, new[] { 0, 0 })]
+
+        public void FindMinValueAndItIndexTests_WhensingleLinkedListHasElements_MaxValueReturned(int[] input, int[] expected)
+        {
+            SingleLinkedList singleLinkedList = new SingleLinkedList(input);
+            int [] actual = singleLinkedList.FindMinValueAndItIndex();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(new[] { 1, 2, 3, 5 }, 1, 0)]
+        [TestCase(new[] { 1, 2, 3, 5 }, 2, 1)]
+        [TestCase(new[] { 1, 2, 3, 5 }, 5, 3)]
+        [TestCase(new[] { 1, 2, 3, 2 }, 3, 2)]
+        [TestCase(new[] { 1, 2, 3, 5 }, 7, -1)]
+        public void RemoveFirstByValueTests_WhenFirstValueFoundRemoveItFromList_IndexOfThatValueReturned(int[] input,
+            int value, int expected)
+        {
+            SingleLinkedList singleLinkedList = new SingleLinkedList(input);
+
+            int actual = singleLinkedList.RemoveFirstByValue(value);
+
+            Assert.AreEqual(expected, actual);
+        }
 
     }
 }

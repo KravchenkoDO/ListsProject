@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 
 namespace ListsProject
 {
     public class SingleLinkedList
     {
-
         private int _length;
         private Node _head; //первый элемент списка
         private Node _tail; //последний элемент списка
@@ -38,7 +35,6 @@ namespace ListsProject
         {
             ListIsEmpty();
         }
-
 
         public SingleLinkedList(int value)
         {
@@ -74,12 +70,14 @@ namespace ListsProject
             _head = null;
             _tail = null;
         }
+
         private void AddInEmpty(int value)
         {
             _length = 1;
             _head = new Node(value);
             _tail = _head;
         }
+
         private Node GetNodeByIndex(int index)
         {
             if (index < 0 || index >= this._length || this.Empty)
@@ -147,16 +145,17 @@ namespace ListsProject
                 _length++;
             }
         }
+
         public void RemoveFirst()
         {
             _head = _head.Next;
             _length--;
         }
+
         public void RemoveLast()
         {
             RemoveByIndex(_length - 1);
         }
-
 
         public void RemoveByIndex(int index)
         {
@@ -172,8 +171,6 @@ namespace ListsProject
                 _length--;
 
             }
-
-
         }
 
         public void RemoveRangeFromLast(int count)
@@ -213,15 +210,16 @@ namespace ListsProject
             _length-=count;
             }
         }
+
         public void RemoveRangeFromIndex(int index, int count)
         {
-            if (index < 0 || index > this._length || this.Empty)//TODO: отбить ошибки, переприсвоить голову и хвост, если понадобится
+            if (index < 0 || index > this._length || this.Empty)
             {
                 throw new IndexOutOfRangeException();
             }
             if (index + count > _length || count < 0)
             {
-                throw new ArgumentException($"You try to remove more elements than you have in list!");
+                throw new ArgumentException("You try to remove more elements than you have in list!");
             }
             if (index == 0)
             {
@@ -328,6 +326,84 @@ namespace ListsProject
             return true;
         }
 
-       
+        public int[] FindMaxValueAndItIndex() 
+        { 
+            Node tmp = _head;
+            int[] result = new int[2];
+            int maxValueIndex = 0;
+            int maxValue = tmp.Data;
+            for (int i = 0; i < _length; i++)
+            {
+                if (tmp.Data > maxValue)
+                {
+                    maxValueIndex = i;
+                    maxValue = tmp.Data;
+                }
+
+                tmp = tmp.Next;
+            }
+
+            result[0] = maxValueIndex;
+            result[1] = maxValue;
+
+            return result;
+        }
+
+        public int[]FindMinValueAndItIndex()
+        {
+            Node tmp = _head;
+            int[] result = new int[2];
+            int minValueIndex = 0;
+            int minValue = tmp.Data;
+            for (int i = 0; i < _length; i++)
+            {
+                if (tmp.Data < minValue)
+                {
+                    minValueIndex = i;
+                    minValue = tmp.Data;
+                }
+
+                tmp = tmp.Next;
+            }
+
+            result[0] = minValueIndex;
+            result[1] = minValue;
+
+            return result;
+        }
+
+        public int RemoveFirstByValue(int value)
+        {
+            Node tmp = _head;
+            int index = -1;
+            if (tmp.Data == value)
+            {
+                index = 0;
+                RemoveFirst();
+                
+            }
+
+            for (int i = 1; i < _length; i++)
+            {
+                if (tmp.Next.Data == value)
+                {
+
+                    if (_tail != tmp.Next)
+                    {
+                        tmp.Next = tmp.Next.Next;
+                        index = i;
+                        break;
+                    }
+
+                    tmp.Next = null;
+                    _tail = tmp;
+                    index = i;
+                }
+
+                tmp = tmp.Next;
+            }
+
+            return index;
+        }
     }
 }
