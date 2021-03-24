@@ -36,29 +36,21 @@ namespace ListsProject
 
         public SingleLinkedList()
         {
-            _length = 0;
-            _head = null;
-            _tail = null;
+            ListIsEmpty();
         }
+
 
         public SingleLinkedList(int value)
         {
-            _length = 1;
-            _head = new Node(value);
-            _tail = _head;
+            AddInEmpty(value);
         }
 
-        /* Смотрим длинну входного массива, если он не пустой***, то мы создаем новый узел с первым значением массива и пустой ссылкой
-         и говорим что это наш первый и последний элемент списка, т.к. он единственный
-         дальше в цикле берем значение следующего элемента массива (со второго и до конца массива)
-         и говорим что наш первый узел (у него нет указателя на второй) теперь ссылается на новый узел со вторым значением массива и пустой ссылкой
-         и говорим что этот новый узел теперь является последним элементом списка
-         ***а если он пустой то мы говорим что наш список тоже пустой, т.к. в нем нет ниодного узла*/
         public SingleLinkedList(int[] values)
         {
-            _length = values.Length;
+
             if (values.Length != 0)
             {
+                _length = values.Length;
                 _head = new Node(values[0]);
                 _tail = _head;
 
@@ -70,14 +62,25 @@ namespace ListsProject
             }
             else
             {
-                _head = null;
-                _tail = null;
+                ListIsEmpty();
             }
 
 
         }
 
-        public Node GetNodeByIndex(int index)
+        private void ListIsEmpty()
+        {
+            _length = 0;
+            _head = null;
+            _tail = null;
+        }
+        private void AddInEmpty(int value)
+        {
+            _length = 1;
+            _head = new Node(value);
+            _tail = _head;
+        }
+        private Node GetNodeByIndex(int index)
         {
             if (index < 0 || index >= this._length || this.Empty)
             {
@@ -97,13 +100,156 @@ namespace ListsProject
 
         public void Add(int value)
         {
-            _length++;
-            _tail.Next = new Node(value);
-            _tail = _tail.Next;
+            if (this.Empty)
+            {
+                AddInEmpty(value);
+            }
+            else
+            {
+                _length++;
+                _tail.Next = new Node(value);
+                _tail = _tail.Next;
+            }
         }
 
-        public void Add(int index, int value)
+        public void AddFirst(int value)
         {
+            if (Empty)
+            {
+                AddInEmpty(value);
+            }
+            else
+            {
+                _length++;
+                Node tmp = new Node(value);
+                tmp.Next = this._head;
+                _head = tmp;
+            }
+        }
+
+        public void AddByIndex(int index, int value)
+        {
+            if (index < 0 || index > this._length || this.Empty)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            if (index == 0)
+            {
+                this.AddFirst(value);
+            }
+            else
+            {
+                Node current = GetNodeByIndex(index - 1);
+                Node tmp = new Node(value);
+                tmp.Next = current.Next;
+                current.Next = tmp;
+                _length++;
+            }
+        }
+        public void RemoveFirst()
+        {
+            _head = _head.Next;
+            _length--;
+        }
+        public void RemoveLast()
+        {
+            RemoveByIndex(_length - 1);
+        }
+
+
+        public void RemoveByIndex(int index)
+        {
+            if (index == 0)
+            {
+                this.RemoveFirst();
+            }
+            else
+            {
+                Node tmp = this.GetNodeByIndex(index - 1);
+
+                tmp.Next = tmp.Next.Next;
+                _length--;
+
+            }
+
+
+        }
+
+        public void RemoveRangeFromLast(int count)
+        {
+            if (count > _length || count < 0)
+            {
+                throw new ArgumentException($"You try to remove more elements than you have in list {count} > {_length}");
+            }
+            if (count == _length)
+            {
+                ListIsEmpty();
+            }
+            else
+            {
+            int index = _length - 1 - count;
+            Node newTail = GetNodeByIndex(index);
+            newTail.Next = null;
+            _tail = newTail;
+            _length = _length - count;
+            }
+        }
+
+        public void RemoveRangeFromFirst(int count)
+        {
+            if (count > _length || count < 0)
+            {
+                throw new ArgumentException($"You try to remove more elements than you have in list!");
+            }
+
+            if (count !=0)
+            {
+            int index = count - 1;
+            Node tmp = GetNodeByIndex(index - 1);
+
+            _head = tmp.Next.Next;
+            tmp.Next = null;
+            _length-=count;
+            }
+        }
+        public void RemoveRangeFromIndex(int index, int count)
+        {
+            if (index < 0 || index > this._length || this.Empty)//TODO: отбить ошибки, переприсвоить голову и хвост, если понадобится
+            {
+                throw new IndexOutOfRangeException();
+            }
+            if (index + count > _length || count < 0)
+            {
+                throw new ArgumentException($"You try to remove more elements than you have in list!");
+            }
+            if (index == 0)
+            {
+                RemoveRangeFromFirst(count);
+            }
+            else
+            {
+                Node from = null;
+                Node to = _head;
+
+                for (int i = 0; i < index + count; i++)
+                {
+                    if (i == index - 1)
+                    {
+                        from = to;
+                    }
+                    to = to.Next;
+                }
+
+                from.Next = to;
+
+                if (index + count == _length)
+                {
+                    _tail = to;
+                }
+
+                _length -= count;
+            }
 
         }
 
@@ -126,6 +272,27 @@ namespace ListsProject
             return s;
         }
 
+        public int GetFirstIndexByValue(int value)
+        {
+
+            if (Empty)
+            {
+                return -1;
+            }
+                Node tmp = _head;
+
+                for (int i = 0; i < _length; i++)
+                {
+                    if (tmp.Data == value)
+                    {
+                        return i;
+                    }
+                    tmp = tmp.Next;
+                }
+
+            return -1;
+        }
+
         public override bool Equals(object obj)
         {
             SingleLinkedList outcomeList = (SingleLinkedList)obj;
@@ -138,6 +305,10 @@ namespace ListsProject
 
             Node current = this._head;
             Node outcome = outcomeList._head;
+            if (this._length == 0 && current == outcome)
+            {
+                return true;
+            }
             if (this._length == 1 && current.Data == outcome.Data)
             {
                 return true;
@@ -156,5 +327,7 @@ namespace ListsProject
 
             return true;
         }
+
+       
     }
 }

@@ -6,15 +6,9 @@ namespace ListsProject
 {
     public class Node
     {
-        public int Data;
+        public int Data { get; set; }
+        public Node Next { get; set; }
 
-        public Node Next;
-
-        public Node()
-        {
-            Data = 0;
-            Next = null;
-        }
         public Node(int value)
         {
             Data = value;
