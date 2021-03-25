@@ -190,6 +190,7 @@ namespace ListsProject.Tests
         [TestCase(new[] { 1, 2, 3, 5 }, 1, 0)]
         [TestCase(new[] { 1, 2, 3, 5 }, 2, 1)]
         [TestCase(new[] { 1, 2, 3, 5 }, 5, 3)]
+        [TestCase(new[] { 1, 2, 2, 5 }, 2, 1)]
         [TestCase(new[] { 1, 2, 3, 2 }, 3, 2)]
         [TestCase(new[] { 1, 2, 3, 5 }, 7, -1)]
         public void RemoveFirstByValueTests_WhenFirstValueFoundRemoveItFromList_IndexOfThatValueReturned(int[] input,
@@ -202,5 +203,86 @@ namespace ListsProject.Tests
             Assert.AreEqual(expected, actual);
         }
 
-    }
+        [TestCase(new[] { 1, 2, 3, 5 }, 5, 1)]
+        [TestCase(new[] { 1, 2, 3, 2 }, 2, 2)]
+        [TestCase(new[] { 1, 2, 3, 5 }, 7, 0)]
+        [TestCase(new[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, 1, 10)]
+        public void RemoveAllByValueTests_WhenValuesFoundRemoveItFromList_CountOfThatValuesReturned(int[] input,
+            int value,
+            int expected)
+        {
+            SingleLinkedList singleLinkedList = new SingleLinkedList(input);
+
+            int actual = singleLinkedList.RemoveAllByValue(value);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(new[] { 1, 2, 3, 4 }, new[] { 6, 7, 8, 9 }, new[] { 6, 7, 8, 9, 1, 2, 3, 4 })]
+        [TestCase(new[] { 1, 2 }, new[] { 6, 7, 8 }, new[] { 6, 7, 8, 1, 2 })]
+        [TestCase(new[] { 1, 2 }, new int []{}, new[] { 1, 2 })]
+        [TestCase(new int[] { }, new[] { 1, 2 }, new[] { 1, 2 })]
+        public void AddListFirstTests_WhenToFirstListAddAnotherListInFirstPosition_ListWithInsertedInFirstPositionListReturned(int[] input,
+             int[] arrayElements, int[] output)
+        {
+            SingleLinkedList actual = new SingleLinkedList(input);
+            SingleLinkedList linkedList = new SingleLinkedList(arrayElements);
+            SingleLinkedList expected = new SingleLinkedList(output);
+
+            actual.AddListFirst(linkedList);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(new[] { 1, 2, 3, 4 }, new[] { 6, 7, 8, 9 }, new[] { 1, 2, 3, 4, 6, 7, 8, 9 })]
+        [TestCase(new[] { 1, 2 }, new[] { 6, 7, 8, 9, 1, 2, 3, 4 }, new[] { 1, 2, 6, 7, 8, 9, 1, 2, 3, 4 })]
+        public void
+            AddListLastTests_WhenToFirstListAddAnotherListInLastPosition_ListWithInsertedInLasttPositionListReturned(
+                int[] input,
+                int[] arrayElements, int[] output)
+        {
+            SingleLinkedList actual = new SingleLinkedList(input);
+            SingleLinkedList arrayList = new SingleLinkedList(arrayElements);
+            SingleLinkedList expected = new SingleLinkedList(output);
+
+            actual.AddListLast(arrayList);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(new[] { 1, 2, 3, 4 }, 0, new[] { 6, 7, 8, 9 }, new[] { 6, 7, 8, 9, 1, 2, 3, 4 })]
+        [TestCase(new int [] { }, 0, new[] { 6, 7, 8, 9 }, new[] { 6, 7, 8, 9})]
+        [TestCase(new int[] { 1 }, 0, new[] { 6, 7, 8, 9 }, new[] { 6, 7, 8, 9, 1 })]
+        [TestCase(new int[] { 1 }, 1, new[] { 6, 7, 8, 9 }, new[] { 1, 6, 7, 8, 9 })]
+        [TestCase(new[] { 1, 2, 3, 4 }, 0, new int [] { }, new[] { 1, 2, 3, 4 })]
+        [TestCase(new[] { 1, 2, 3, 4 }, 0, new[] { 6, 7, 8, 9 }, new[] { 6, 7, 8, 9, 1, 2, 3, 4 })]
+        [TestCase(new[] { 1, 2 }, 1, new[] { 6, 7, 8, 9, 1, 2, 3, 4 }, new[] { 1, 6, 7, 8, 9, 1, 2, 3, 4, 2 })]
+        [TestCase(new[] { 1, 6, 7, 8, 9, 1, 2, 3, 4, 2 }, 4, new[] { 1, 6, 7, 8, 9, 1, 2, 3, 4, 2 }, new[] { 1, 6, 7, 8, 1, 6, 7, 8, 9, 1, 2, 3, 4, 2, 9, 1, 2, 3, 4, 2 })]
+        public void AddListByIndexTests_WhenToListAddAnotherListByIndex_ListWithInsertedInIndexListReturned(int[] input,
+             int index, int[] arrayElements, int[] output)
+        {
+            SingleLinkedList actual = new SingleLinkedList(input);
+            SingleLinkedList arrayList = new SingleLinkedList(arrayElements);
+            SingleLinkedList expected = new SingleLinkedList(output);
+
+            actual.AddListByIndex(index, arrayList);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(new[] { 1, 2, 3, 4 }, new[] { 4, 3, 2, 1 })]
+        [TestCase(new[] { 1, 2, 5, 3, 4 }, new[] { 4, 3, 5, 2, 1 })]
+        [TestCase(new int [] { }, new int [] { })]
+        [TestCase(new[] { 0 }, new[] { 0 })]
+        public void ReverseTests_WhenArrayList_ReversedArrayListReturned(int[] input, int[] output)
+        {
+            SingleLinkedList actual = new SingleLinkedList(input);
+        actual.Reverse();
+            SingleLinkedList expected = new SingleLinkedList(output);
+
+        Assert.AreEqual(expected, actual);
+        }
+
+
+}
 }

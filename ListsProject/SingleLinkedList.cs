@@ -177,7 +177,7 @@ namespace ListsProject
         {
             if (count > _length || count < 0)
             {
-                throw new ArgumentException($"You try to remove more elements than you have in list {count} > {_length}");
+                throw new ArgumentException("You try to remove more elements than you have in list");
             }
             if (count == _length)
             {
@@ -185,11 +185,11 @@ namespace ListsProject
             }
             else
             {
-            int index = _length - 1 - count;
-            Node newTail = GetNodeByIndex(index);
-            newTail.Next = null;
-            _tail = newTail;
-            _length = _length - count;
+                int index = _length - 1 - count;
+                Node newTail = GetNodeByIndex(index);
+                newTail.Next = null;
+                _tail = newTail;
+                _length = _length - count;
             }
         }
 
@@ -200,14 +200,14 @@ namespace ListsProject
                 throw new ArgumentException($"You try to remove more elements than you have in list!");
             }
 
-            if (count !=0)
+            if (count != 0)
             {
-            int index = count - 1;
-            Node tmp = GetNodeByIndex(index - 1);
+                int index = count - 1;
+                Node tmp = GetNodeByIndex(index - 1);
 
-            _head = tmp.Next.Next;
-            tmp.Next = null;
-            _length-=count;
+                _head = tmp.Next.Next;
+                tmp.Next = null;
+                _length -= count;
             }
         }
 
@@ -277,16 +277,16 @@ namespace ListsProject
             {
                 return -1;
             }
-                Node tmp = _head;
+            Node tmp = _head;
 
-                for (int i = 0; i < _length; i++)
+            for (int i = 0; i < _length; i++)
+            {
+                if (tmp.Data == value)
                 {
-                    if (tmp.Data == value)
-                    {
-                        return i;
-                    }
-                    tmp = tmp.Next;
+                    return i;
                 }
+                tmp = tmp.Next;
+            }
 
             return -1;
         }
@@ -303,7 +303,7 @@ namespace ListsProject
 
             Node current = this._head;
             Node outcome = outcomeList._head;
-            if (this._length == 0 && current == outcome)
+            if (this.Empty && current == outcome)
             {
                 return true;
             }
@@ -326,8 +326,8 @@ namespace ListsProject
             return true;
         }
 
-        public int[] FindMaxValueAndItIndex() 
-        { 
+        public int[] FindMaxValueAndItIndex()
+        {
             Node tmp = _head;
             int[] result = new int[2];
             int maxValueIndex = 0;
@@ -349,7 +349,7 @@ namespace ListsProject
             return result;
         }
 
-        public int[]FindMinValueAndItIndex()
+        public int[] FindMinValueAndItIndex()
         {
             Node tmp = _head;
             int[] result = new int[2];
@@ -378,9 +378,9 @@ namespace ListsProject
             int index = -1;
             if (tmp.Data == value)
             {
-                index = 0;
                 RemoveFirst();
-                
+                return 0;
+
             }
 
             for (int i = 1; i < _length; i++)
@@ -392,12 +392,16 @@ namespace ListsProject
                     {
                         tmp.Next = tmp.Next.Next;
                         index = i;
+                        _length--;
                         break;
                     }
-
-                    tmp.Next = null;
-                    _tail = tmp;
-                    index = i;
+                    else
+                    {
+                        tmp.Next = null;
+                        _tail = tmp;
+                        index = i;
+                        _length--;
+                    }
                 }
 
                 tmp = tmp.Next;
@@ -405,5 +409,123 @@ namespace ListsProject
 
             return index;
         }
+
+
+
+        public int RemoveAllByValue(int value) //TODO:Delete this bull shit and write new one!!!
+        {
+            int count = 0;
+            Node previous = null;
+            Node current = _head;
+            Node currentNext = current.Next;
+
+            while (!(currentNext is null))
+            {
+                previous = current;
+                if (current.Data == value)
+                {
+                    if (_head == current)
+                    current.Next = null;
+                    previous.Next = currentNext;
+                    count++;
+                    _length--;
+                }
+                if (currentNext is null && current.Data == value)
+                {
+                    current.Next = null;
+                    _tail = current;
+                    count++;
+                    _length--;
+                }
+                if (current == _head && current.Data == value)
+                {
+                    currentNext = _head;
+                    current.Next = null;
+                    count++;
+                    _length--;
+                    continue;
+                }
+                    current = currentNext;
+            }
+            return count;
+
+ 
+   
+        }
+
+        public void AddListLast(SingleLinkedList linkedList)
+        {
+
+            this._tail.Next = linkedList._head;
+            this._tail = linkedList._tail;
+            this._length += linkedList._length;
+        }
+        public void AddListFirst(SingleLinkedList linkedList)
+        {
+            if (this.Empty)
+            {
+                linkedList.ToString();
+            }
+            if (!(linkedList.Empty))
+            {
+                Node tmp = this._head;
+
+                this._head = linkedList._head;
+                linkedList._tail.Next = tmp;
+                linkedList._tail = this._tail;
+
+                this._length += linkedList._length;
+            }
+        }
+
+        public void AddListByIndex(int index, SingleLinkedList arrayList)
+        {
+            if (index < 0 || index > this._length)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else if (index == 0)
+            {
+                AddListFirst(arrayList);
+            }
+            else if (index == this._length)
+            {
+                AddListLast(arrayList);
+            }
+            else if (this.Empty)
+            {
+                arrayList.ToString();
+            }
+            else
+            {
+                Node tmp = GetNodeByIndex(index - 1);
+                arrayList._tail.Next = tmp.Next;
+                tmp.Next = arrayList._head;
+                this._length += arrayList._length;
+            }
+
+        }
+
+        public void Reverse()
+        {
+            if (!(this.Empty))
+            { 
+            Node previousNode = null;
+            Node currentNode = this._head;
+            Node nextNode = null;
+
+            while (currentNode != null)
+            {
+                    nextNode = currentNode.Next;
+                    currentNode.Next = previousNode;
+                    previousNode = currentNode;
+                    currentNode = nextNode;
+            }
+            _head = previousNode;
+            }
+        }
+
     }
 }
+
+
