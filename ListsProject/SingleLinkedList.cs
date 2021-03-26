@@ -6,8 +6,8 @@ namespace ListsProject
     public class SingleLinkedList
     {
         private int _length;
-        private Node _head; //первый элемент списка
-        private Node _tail; //последний элемент списка
+        private Node _head; 
+        private Node _tail; 
 
         public bool Empty
         {
@@ -412,45 +412,39 @@ namespace ListsProject
 
 
 
-        public int RemoveAllByValue(int value) //TODO:Delete this bull shit and write new one!!!
+        public int RemoveAllByValue(int value)
         {
             int count = 0;
-            Node previous = null;
+            Node tmp;
             Node current = _head;
-            Node currentNext = current.Next;
 
-            while (!(currentNext is null))
+            while (!(current is null) && current.Data == value)
             {
-                previous = current;
-                if (current.Data == value)
-                {
-                    if (_head == current)
-                    current.Next = null;
-                    previous.Next = currentNext;
-                    count++;
-                    _length--;
-                }
-                if (currentNext is null && current.Data == value)
-                {
-                    current.Next = null;
-                    _tail = current;
-                    count++;
-                    _length--;
-                }
-                if (current == _head && current.Data == value)
-                {
-                    currentNext = _head;
-                    current.Next = null;
-                    count++;
-                    _length--;
-                    continue;
-                }
-                    current = currentNext;
+                RemoveFirst();
+                current = _head;
+                count++;
             }
-            return count;
 
- 
-   
+            while (!(current is null))
+            {
+                tmp = current;
+                if (current.Data == value && current != _tail)
+                {
+                    tmp.Next = current.Next;
+                    current = current.Next;
+                    count++;
+                    _length--;
+                }
+                if (current == _tail && current.Data == value)
+                {
+                    tmp.Next = null;
+                    _tail = tmp;
+                    count++;
+                    _length--;
+                }
+                current = tmp.Next;
+            }
+                return count;
         }
 
         public void AddListLast(SingleLinkedList linkedList)
@@ -525,6 +519,10 @@ namespace ListsProject
             }
         }
 
+        public void Sort(bool ascending) //TODO: Write some code
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

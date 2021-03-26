@@ -283,6 +283,22 @@ namespace ListsProject.Tests
         Assert.AreEqual(expected, actual);
         }
 
+        [TestCase(new[] { 1, 3, 5, 7, 8 }, false, new[] { 8, 7, 5, 3, 1 })]
+        [TestCase(new[] { 8, 7, 5, 3, 1 }, false, new[] { 8, 7, 5, 3, 1 })]
+        [TestCase(new[] { 1 }, false, new[] { 1 })]
+        [TestCase(new[] { 1 }, true, new[] { 1 })]
+        [TestCase(new[] { 1, 3, 5, 7, 8 }, true, new[] { 1, 3, 5, 7, 8 })]
+        [TestCase(new[] { 8, 7, 5, 3, 1 }, true, new[] { 1, 3, 5, 7, 8 })]
 
-}
+        public void SortTests_WhenArrayList_SortedArrayListByDescendingReturned(int[] input, bool ascending,
+            int[] output)
+        {
+            SingleLinkedList actual = new SingleLinkedList(input);
+            SingleLinkedList expected = new SingleLinkedList(output);
+            actual.Sort(ascending);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+    }
 }
