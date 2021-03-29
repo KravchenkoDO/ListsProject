@@ -456,46 +456,49 @@ namespace ListsProject
         }
         public void AddListFirst(SingleLinkedList linkedList)
         {
-            if (this.Empty)
-            {
-                linkedList.ToString();
-            }
             if (!(linkedList.Empty))
             {
+                if (this.Empty)
+                {
+                    this._head = linkedList._head;
+                }
+                else
+                {
                 Node tmp = this._head;
 
                 this._head = linkedList._head;
                 linkedList._tail.Next = tmp;
                 linkedList._tail = this._tail;
+                }
 
                 this._length += linkedList._length;
             }
         }
 
-        public void AddListByIndex(int index, SingleLinkedList arrayList)
+        public void AddListByIndex(int index, SingleLinkedList linkedList)
         {
             if (index < 0 || index > this._length)
             {
                 throw new IndexOutOfRangeException();
             }
-            else if (index == 0)
+            if (index == 0)
             {
-                AddListFirst(arrayList);
+                AddListFirst(linkedList);
             }
             else if (index == this._length)
             {
-                AddListLast(arrayList);
+                AddListLast(linkedList);
             }
             else if (this.Empty)
             {
-                arrayList.ToString();
+                linkedList.ToString();
             }
             else
             {
                 Node tmp = GetNodeByIndex(index - 1);
-                arrayList._tail.Next = tmp.Next;
-                tmp.Next = arrayList._head;
-                this._length += arrayList._length;
+                linkedList._tail.Next = tmp.Next;
+                tmp.Next = linkedList._head;
+                this._length += linkedList._length;
             }
 
         }
@@ -519,9 +522,71 @@ namespace ListsProject
             }
         }
 
-        public void Sort(bool ascending) //TODO: Write some code
+        public void Sort(bool ascending)
         {
-            throw new NotImplementedException();
+
+            Node sorted = null;
+            Node current = _head;
+
+            while (current != null)
+            {
+                
+                Node next = current.Next;
+                
+                sortedInsert(current);
+                
+                current = next;
+            }
+
+            _head = sorted;
+
+            void sortedInsert(Node newnode)
+            {
+
+                if (ascending)
+                {
+                    if (sorted == null || sorted.Data >= newnode.Data)
+                    {
+                        newnode.Next = sorted;
+                        sorted = newnode;
+                    }
+                    else
+                    {
+                        Node current = sorted;
+
+                        while (current.Next != null &&
+                               current.Next.Data < newnode.Data)
+                        {
+                            current = current.Next;
+                        }
+
+                        newnode.Next = current.Next;
+                        current.Next = newnode;
+                    }
+                }
+                else
+                {
+                    if (sorted == null || sorted.Data <= newnode.Data)
+                    {
+                        newnode.Next = sorted;
+                        sorted = newnode;
+                    }
+                    else
+                    {
+                        Node current = sorted;
+
+                        while (current.Next != null &&
+                               current.Next.Data > newnode.Data)
+                        {
+                            current = current.Next;
+                        }
+
+                        newnode.Next = current.Next;
+                        current.Next = newnode;
+                    }
+
+                }
+            }
         }
     }
 }
