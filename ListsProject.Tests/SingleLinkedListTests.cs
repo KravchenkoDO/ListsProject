@@ -299,6 +299,7 @@ namespace ListsProject.Tests
 
             Assert.AreEqual(expected, actual);
         }
+        //TODO: Add negative tests and send pull request to Sviatoslav
 
     }
 }

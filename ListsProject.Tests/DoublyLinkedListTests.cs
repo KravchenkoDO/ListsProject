@@ -257,5 +257,36 @@ namespace ListsProject.Tests
 
             Assert.AreEqual(expected, actual);
         }
+
+        [TestCase(new[] { 1, 2, 3, 4 }, new[] { 4, 3, 2, 1 })]
+        [TestCase(new[] { 1, 2, 5, 3, 4 }, new[] { 4, 3, 5, 2, 1 })]
+        [TestCase(new int[] { }, new int[] { })]
+        [TestCase(new[] { 0 }, new[] { 0 })]
+        public void ReverseTests_WhenArrayList_ReversedArrayListReturned(int[] input, int[] output)
+        {
+            DoublyLinkedList actual = new DoublyLinkedList(input);
+            actual.Reverse();
+            DoublyLinkedList expected = new DoublyLinkedList(output);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(new[] { 1, 3, 5, 7, 8 }, false, new[] { 8, 7, 5, 3, 1 })]
+        [TestCase(new[] { 8, 7, 5, 3, 1 }, false, new[] { 8, 7, 5, 3, 1 })]
+        [TestCase(new[] { 1 }, false, new[] { 1 })]
+        [TestCase(new[] { 1 }, true, new[] { 1 })]
+        [TestCase(new[] { 1, 3, 5, 7, 8 }, true, new[] { 1, 3, 5, 7, 8 })]
+        [TestCase(new[] { 8, 7, 5, 3, 1 }, true, new[] { 1, 3, 5, 7, 8 })]
+
+        public void SortTests_WhenArrayList_SortedArrayListByDescendingReturned(int[] input, bool ascending,
+            int[] output)
+        {
+            DoublyLinkedList actual = new DoublyLinkedList(input);
+            DoublyLinkedList expected = new DoublyLinkedList(output);
+            actual.Sort(ascending);
+
+            Assert.AreEqual(expected, actual);
+        }
+        //TODO: Add negative tests and send pull request to Sviatoslav
     }
 }

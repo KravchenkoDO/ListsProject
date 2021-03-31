@@ -7,8 +7,8 @@ namespace ListsProject
     public class DoublyLinkedList
     {
         private int _length;
-        private DLNode _head; 
-        private DLNode _tail; 
+        private DLNode _head;
+        private DLNode _tail;
 
         public bool Empty
         {
@@ -157,7 +157,7 @@ namespace ListsProject
             }
             else
             {
-                count = _length-1;
+                count = _length - 1;
                 tmp = _tail;
                 while (!(tmp is null))
                 {
@@ -249,8 +249,8 @@ namespace ListsProject
             _length += linkedList._length;
         }
         public void AddListFirst(DoublyLinkedList linkedList)
-        {            
-            if(!(linkedList.Empty))
+        {
+            if (!(linkedList.Empty))
             {
                 if (this.Empty)
                 {
@@ -259,9 +259,9 @@ namespace ListsProject
                 }
                 else
                 {
-                _head.Prev = linkedList._tail;
-                linkedList._tail.Next = _head;
-                _head = linkedList._head;
+                    _head.Prev = linkedList._tail;
+                    linkedList._tail.Next = _head;
+                    _head = linkedList._head;
                 }
 
                 this._length += linkedList._length;
@@ -301,8 +301,8 @@ namespace ListsProject
         {
             if (!(_length == 1) && !Empty)
             {
-            _head = _head.Next;
-            _length--;
+                _head = _head.Next;
+                _length--;
             }
             else
             {
@@ -412,7 +412,7 @@ namespace ListsProject
             {
                 this.RemoveFirst();
             }
-            else if (index == this._length-1)
+            else if (index == this._length - 1)
             {
                 RemoveLast();
             }
@@ -422,9 +422,9 @@ namespace ListsProject
                 DLNode tmp = GetDLNodeByIndex(index - 1);
                 if (!(tmp.Next.Next is null))
                 {
-                tmp.Next.Next.Prev = tmp;
-                tmp.Next = tmp.Next.Next;
-                _length--;
+                    tmp.Next.Next.Prev = tmp;
+                    tmp.Next = tmp.Next.Next;
+                    _length--;
                 }
                 else
                 {
@@ -538,7 +538,7 @@ namespace ListsProject
             return index;
         }
 
-        public int RemoveAllByValue(int value) //UNDONE: chek this method for prev values
+        public int RemoveAllByValue(int value)
         {
             int count = 0;
             DLNode tmp;
@@ -573,5 +573,67 @@ namespace ListsProject
             }
             return count;
         }
+
+        public void Reverse()
+        {
+            if (!(this.Empty))
+            {
+                DLNode previousNode = null;
+                DLNode currentNode = this._head;
+                DLNode nextNode = null;
+
+                while (currentNode != null)
+                {
+                    nextNode = currentNode.Next;
+                    currentNode.Next = previousNode;
+                    currentNode.Prev = nextNode;
+                    previousNode = currentNode;
+                    currentNode = nextNode;
+                }
+                _tail = _head;
+                _head = previousNode;
+            }
+
+        }
+
+        public void Sort(bool ascending) //Bubble Sort))
+        {
+            DLNode current = null, index = null;
+            int tempData;
+
+            if (!(_head is null))
+            {
+                for (current = _head; current.Next != null; current = current.Next)
+                {
+                    for (index = current.Next; index != null; index = index.Next)
+                    {
+                        if (ascending)
+                        {
+                            if (current.Data > index.Data)
+                            {
+                                tempData = current.Data;
+                                current.Data = index.Data;
+                                index.Data = tempData;
+                            }
+                        }
+                        else
+                        {
+                            if (current.Data < index.Data)
+                            {
+                                tempData = current.Data;
+                                current.Data = index.Data;
+                                index.Data = tempData;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
+
     }
 }
+
