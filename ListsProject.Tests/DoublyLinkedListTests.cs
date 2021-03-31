@@ -241,21 +241,21 @@ namespace ListsProject.Tests
 
             Assert.AreEqual(expected, actual);
         }
-        //[TestCase(new[] { 1, 2, 3, 4, 5, 6, 7 }, 2, 2, new[] { 1, 2, 5, 6, 7 })]
-        //[TestCase(new[] { 1, 2, 3, 4, 5, 6, 7 }, 5, 2, new[] { 1, 2, 3, 4, 5 })]
-        //[TestCase(new[] { 1, 2, 3, 4 }, 0, 4, new int[] { })]
-        //[TestCase(new[] { 1, 2, 3, 4 }, 0, 2, new int[] { 3, 4 })]
-        //[TestCase(new[] { 1, 2, 3, 4 }, 3, 0, new[] { 1, 2, 3, 4 })]
-        //public void
-        //    RemoveRangeFromIndexTests_WhenRemoveRangeOfElementsFromIndexOfList_ListWithoutCountElementsInThisRangeFromIndexReturned(
-        //        int[] input, int index, int count, int[] output)
-        //{
-        //    DoublyLinkedList actual = new DoublyLinkedList(input);
-        //    DoublyLinkedList expected = new DoublyLinkedList(output);
+        [TestCase(new[] { 1, 2, 3, 4, 5, 6, 7 }, 2, 2, new[] { 1, 2, 5, 6, 7 })]
+        [TestCase(new[] { 1, 2, 3, 4, 5, 6, 7 }, 5, 2, new[] { 1, 2, 3, 4, 5 })]
+        [TestCase(new[] { 1, 2, 3, 4 }, 0, 4, new int[] { })]
+        [TestCase(new[] { 1, 2, 3, 4 }, 0, 2, new int[] { 3, 4 })]
+        [TestCase(new[] { 1, 2, 3, 4 }, 3, 0, new[] { 1, 2, 3, 4 })]
+        public void
+            RemoveRangeFromIndexTests_WhenRemoveRangeOfElementsFromIndexOfList_ListWithoutCountElementsInThisRangeFromIndexReturned(
+                int[] input, int index, int count, int[] output)
+        {
+            DoublyLinkedList actual = new DoublyLinkedList(input);
+            DoublyLinkedList expected = new DoublyLinkedList(output);
 
-        //    actual.RemoveRangeFromIndex(index, count);
+            actual.RemoveRangeFromIndex(index, count);
 
-        //    Assert.AreEqual(expected, actual);
-        //}
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

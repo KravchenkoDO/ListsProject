@@ -248,7 +248,7 @@ namespace ListsProject
             _tail = linkedList._tail;
             _length += linkedList._length;
         }
-        public void AddListFirst(DoublyLinkedList linkedList) //UNDONE: fail when want to add into empty list
+        public void AddListFirst(DoublyLinkedList linkedList)
         {            
             if(!(linkedList.Empty))
             {
@@ -268,7 +268,7 @@ namespace ListsProject
             }
         }
 
-        public void AddListByIndex(int index, DoublyLinkedList linkedList)//UNDONE: fail when want to add into empty list
+        public void AddListByIndex(int index, DoublyLinkedList linkedList)
         {
             if (index < 0 || index > this._length)
             {
@@ -278,7 +278,7 @@ namespace ListsProject
             {
                 AddListFirst(linkedList);
             }
-            else if (index == this._length-1)
+            else if (index == this._length)
             {
                 AddListLast(linkedList);
             }
@@ -294,14 +294,6 @@ namespace ListsProject
                 tmp.Next = linkedList._head;
                 linkedList._head.Prev = tmp;
                 this._length += linkedList._length;
-
-                //DLNode current = GetDLNodeByIndex(index - 1);
-                //DLNode tmp = new DLNode(value);
-                //tmp.Next = current.Next;
-                //current.Next.Prev = tmp;
-                //current.Next = tmp;
-                //tmp.Prev = current;
-                //_length++;
             }
         }
 
@@ -368,49 +360,48 @@ namespace ListsProject
             }
         }
 
-        //public void RemoveRangeFromIndex(int index, int count)
-        //{
-        //    if (index < 0 || index > this._length || this.Empty)
-        //    {
-        //        throw new IndexOutOfRangeException();
-        //    }
+        public void RemoveRangeFromIndex(int index, int count)
+        {
+            if (index < 0 || index > this._length || this.Empty)
+            {
+                throw new IndexOutOfRangeException();
+            }
 
-        //    if (index + count > _length || count < 0)
-        //    {
-        //        throw new ArgumentException("You try to remove more elements than you have in list!");
-        //    }
+            if (index + count > _length || count < 0)
+            {
+                throw new ArgumentException("You try to remove more elements than you have in list!");
+            }
 
-        //    if (index == 0)
-        //    {
-        //        RemoveRangeFromFirst(count);
-        //    }
+            if (index == 0)
+            {
+                RemoveRangeFromFirst(count);
+            }
+            else if (index + count == _length)
+            {
+                RemoveRangeFromLast(count);
+            }
+            else if (count != 0)
+            {
+                DLNode from = null;
+                DLNode to = _head;
 
-        //    if (count !=0)
-        //    {
-        //        DLNode from = null;
-        //        DLNode to = _head;
+                for (int i = 0; i < index + count; i++)
+                {
+                    if (i == index - 1)
+                    {
+                        from = to;
+                    }
+                    to = to.Next;
+                }
 
-        //        for (int i = 0; i < index + count; i++)
-        //        {
-        //            if (i == index - 1)
-        //            {
-        //                from = to;
-        //            }
-        //            to = to.Next;
-        //        }
+                from.Next = to;
+                to.Prev = from;
 
-        //        from.Next = to;
+                _length -= count;
+            }
 
-        //        if (index + count == _length)
-        //        {
-        //            _tail = to;
-        //        }
+        }
 
-        //        _length -= count;
-        //    }
-
-        //}
-       
         public void RemoveByIndex(int index)
         {
             if (index < 0 || index > this._length)
@@ -547,8 +538,6 @@ namespace ListsProject
             return index;
         }
 
-
-
         public int RemoveAllByValue(int value) //UNDONE: chek this method for prev values
         {
             int count = 0;
@@ -568,6 +557,7 @@ namespace ListsProject
                 if (current.Data == value && current != _tail)
                 {
                     tmp.Next = current.Next;
+                    current.Prev = tmp;
                     current = current.Next;
                     count++;
                     _length--;
@@ -583,6 +573,5 @@ namespace ListsProject
             }
             return count;
         }
-
     }
 }
