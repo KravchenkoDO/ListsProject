@@ -159,6 +159,11 @@ namespace ListsProject
 
         public void RemoveByIndex(int index)
         {
+            if (index < 0 || index > this._length || this.Empty)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             if (index == 0)
             {
                 this.RemoveFirst();
