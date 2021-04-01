@@ -49,6 +49,17 @@ namespace ListsProject.Tests
 
             Assert.AreEqual(expected, actual);
         }
+        [TestCase(new[] { 1, 3, 4, 5, 6, 7 }, -1, 2)]
+        [TestCase(new[] { 1, 3, 4, 5, 6, 7 }, 7, 666)]
+        public void AddByIndexTests_WhenAddElementByIndexLessThen0OrGreaterThenLength_IndexOutOfRangeExceptionReturned(
+            int[] input, int index, int value)
+        {
+            DoublyLinkedList actual = new DoublyLinkedList(input);
+
+
+            Assert.Throws<IndexOutOfRangeException>(() => actual.AddByIndex(index, value));
+
+        }
 
         [TestCase(new[] { 1, 2, 3, 4 }, new[] { 6, 7, 8, 9 }, new[] { 6, 7, 8, 9, 1, 2, 3, 4 })]
         [TestCase(new[] { 1, 2 }, new[] { 6, 7, 8 }, new[] { 6, 7, 8, 1, 2 })]
@@ -101,7 +112,17 @@ namespace ListsProject.Tests
 
             Assert.AreEqual(expected, actual);
         }
+        [TestCase(new[] { 1, 2, 3, 4 }, -1, new[] { 6, 7, 8, 9 })]
+        [TestCase(new[] { 1, 2 }, 3, new[] { 6, 7, 8, 9, 1, 2, 3, 4 })]
+        public void AddListByIndexTests_WhenIndexLessThen0OrGreaterThenLength_IndexOutOfRangeExceptionReturned(int[] input,
+            int index, int[] arrayElements)
+        {
+            DoublyLinkedList actual = new DoublyLinkedList(input);
+            DoublyLinkedList arrayList = new DoublyLinkedList(arrayElements);
 
+            Assert.Throws<IndexOutOfRangeException>(() => actual.AddListByIndex(index, arrayList));
+
+        }
         [TestCase(new[] { 1, 1, 1, 1 }, 1, 0)]
         [TestCase(new[] { 1, 2, 3, 4, 6, 7, 8 }, 7, 5)]
         [TestCase(new[] { 1 }, 1, 0)]
@@ -155,6 +176,20 @@ namespace ListsProject.Tests
 
             Assert.AreEqual(expected, actual);
         }
+
+
+        [TestCase(new[] { 1, 3, 4, 5, 6, 7 }, -1)]
+        [TestCase(new[] { 1, 3, 4, 5, 6, 7 }, 7)]
+        public void RemoveByIndexTests_WhenRemoveElementByIndexLessThen0OrGreaterThenLength_IndexOutOfRangeExceptionReturned(
+            int[] input, int index)
+        {
+            DoublyLinkedList actual = new DoublyLinkedList(input);
+
+
+            Assert.Throws<IndexOutOfRangeException>(() => actual.RemoveByIndex(index));
+
+        }
+
         [TestCase(new[] { 1, 2, 3, 4 }, 2, new[] { 1, 2 })]
         [TestCase(new[] { 1, 2, 3, 4 }, 4, new int[] { })]
         [TestCase(new[] { 1, 2, 3, 4 }, 0, new[] { 1, 2, 3, 4 })]
@@ -168,6 +203,15 @@ namespace ListsProject.Tests
             actual.RemoveRangeFromLast(count);
 
             Assert.AreEqual(expected, actual);
+        }
+        public void RemoveRangeFromLastTests_WhenRemoveMoreThenLengthOrLessThen0ElementsFromLast_ArgumentExceptionReturned(
+            int[] input, int count)
+        {
+            DoublyLinkedList actual = new DoublyLinkedList(input);
+
+
+            Assert.Throws<ArgumentException>(() => actual.RemoveRangeFromLast(count));
+
         }
 
         [TestCase(new[] {1, 2, 3, 4}, 2, new[] {3, 4})]
@@ -185,7 +229,17 @@ namespace ListsProject.Tests
 
             Assert.AreEqual(expected, actual);
         }
+        [TestCase(new[] { 1, 3, 4, 5, 6, 7 }, 7)]
+        [TestCase(new[] { 1, 3, 4, 5, 6, 7 }, -7)]
+        public void RemoveRangeFromFirstTests_WhenRemoveMoreThenLengthOrLessThen0ElementsFromLast_ArgumentExceptionReturned(
+            int[] input, int count)
+        {
+            DoublyLinkedList actual = new DoublyLinkedList(input);
 
+
+            Assert.Throws<ArgumentException>(() => actual.RemoveRangeFromFirst(count));
+
+        }
         [TestCase(new[] { 1, 10, 5 }, new[] { 1, 10 })]
         [TestCase(new[] { 1, 10, 5, 14, 999 }, new[] { 4, 999 })]
         [TestCase(new[] { 0 }, new[] { 0, 0 })]
@@ -257,7 +311,28 @@ namespace ListsProject.Tests
 
             Assert.AreEqual(expected, actual);
         }
+        [TestCase(new[] { 1, 3, 4, 5, 6, 7 }, 3, 5)]
+        [TestCase(new[] { 1, 3, 4, 5, 6, 7 }, 5, -1)]
+        public void RemoveRangeFromIndexTests_WhenRemoveMoreThenLengthOrLessThen0ElementsFromLast_ArgumentExceptionReturned(
+            int[] input, int index, int count)
+        {
+            DoublyLinkedList actual = new DoublyLinkedList(input);
 
+
+            Assert.Throws<ArgumentException>(() => actual.RemoveRangeFromIndex(index, count));
+
+        }
+        [TestCase(new[] { 1, 3, 4, 5, 6, 7 }, 7, 2)]
+        [TestCase(new[] { 1, 3, 4, 5, 6, 7 }, -7, 5)]
+        public void RemoveRangeFromIndexTests_WhenRemoveElementsFromIndexLessThen0OrGreaterThenLengthFromLast_IndexOutOfRangeExceptionReturned(
+            int[] input, int index, int count)
+        {
+            DoublyLinkedList actual = new DoublyLinkedList(input);
+
+
+            Assert.Throws<IndexOutOfRangeException>(() => actual.RemoveRangeFromIndex(index, count));
+
+        }
         [TestCase(new[] { 1, 2, 3, 4 }, new[] { 4, 3, 2, 1 })]
         [TestCase(new[] { 1, 2, 5, 3, 4 }, new[] { 4, 3, 5, 2, 1 })]
         [TestCase(new int[] { }, new int[] { })]
