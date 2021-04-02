@@ -8,7 +8,7 @@ namespace ListsProject
 
         private int[] _array;
 
-        public int this[int index] //доступ по индексу //изменение по индексу
+        public int this[int index]
         {
             get
             {
@@ -35,25 +35,26 @@ namespace ListsProject
 
             _array = new int[10];
             _array[0] = value;
-
-
         }
 
         public ArrayList(int[] arrayValues)
         {
-            Length = arrayValues.Length;
-
-            _array = new int[Length];
-
-            Resize();
-            for (int i = 0; i < Length; i++)
+            if (!(arrayValues is null))
             {
-                _array[i] = arrayValues[i];
+                Length = arrayValues.Length;
+
+                _array = new int[Length];
+
+                Resize();
+                for (int i = 0; i < Length; i++)
+                {
+                    _array[i] = arrayValues[i];
+                }
             }
 
         }
 
-        public void Add(int value) // Добавление значения в конец
+        public void Add(int value)
         {
             if (Length >= _array.Length)
             {
@@ -65,59 +66,54 @@ namespace ListsProject
 
         }
 
-        public void AddByIndex(int index, int value) //Добавление значения по индексу
+        public void AddByIndex(int index, int value)
         {
             if (index > Length || index < 0)
             {
                 throw new IndexOutOfRangeException();
             }
-            else
-            {
-                Length++;
-                if (Length >= _array.Length)
-                {
-                    Resize();
-                }
 
-                MoveElements(index, Length, 1);
-                _array[index] = value;
+            if (++Length >= _array.Length)
+            {
+                Resize();
             }
+
+            MoveElements(index, Length, 1);
+            _array[index] = value;
+
         }
 
-        public void AddFirst(int value) // Добавление значения в начало
+        public void AddFirst(int value)
         {
             AddByIndex(0, value);
         }
 
-        public void RemoveLast() //удаляет из конца списка элемент
+        public void RemoveLast()
         {
             if (Length == 0)
             {
                 throw new IndexOutOfRangeException();
             }
-            else
+
+            Length--;
+            if (Length < _array.Length / 2)
             {
-                Length--;
-                if (Length < _array.Length / 2)
-                {
-                    Resize();
-                }
+                Resize();
             }
+
         }
 
-        public void RemoveFirst() //удаляет из начала списка элемент
+        public void RemoveFirst()
         {
             if (Length == 0)
             {
                 throw new IndexOutOfRangeException();
             }
-            else
-            {
-                RemoveByIndex(0);
-            }
+
+            RemoveByIndex(0);
         }
 
-        public void RemoveByIndex(int index) //удаляет из списка элемент по индексу index
+        public void RemoveByIndex(int index)
         {
             if (index > (Length - 1) || index < 0)
             {
@@ -133,7 +129,7 @@ namespace ListsProject
 
         }
 
-        public void RemoveRangeFromLast(int count) //удаляет из списка count элементов, начиная с конца
+        public void RemoveRangeFromLast(int count)
         {
             if (count > Length || count < 0)
             {
@@ -146,7 +142,7 @@ namespace ListsProject
             }
         }
 
-        public void RemoveRangeFromFirst(int count) //удаляет из списка count элементов, начиная с начала
+        public void RemoveRangeFromFirst(int count)
         {
             if (count > Length || count < 0)
             {
@@ -156,7 +152,7 @@ namespace ListsProject
             RemoveRangeFromIndex(0, count);
         }
 
-        public void RemoveRangeFromIndex(int index, int count) //удаляет из списка count элементов, начиная с индекса index
+        public void RemoveRangeFromIndex(int index, int count)
         {
             if (index > (Length - 1) || index < 0)
             {
@@ -177,7 +173,7 @@ namespace ListsProject
             }
         }
 
-        public int RemoveFirstByValue(int value) //удаление по значению первого
+        public int RemoveFirstByValue(int value)
         {
             int index = GetFirstIndexByValue(value);
             if (index >= 0)
@@ -188,7 +184,7 @@ namespace ListsProject
             return index;
         }
 
-        public int RemoveAllByValue(int value) //удаление по значению всех
+        public int RemoveAllByValue(int value)
         {
             int count = 0;
             int index;
@@ -210,12 +206,7 @@ namespace ListsProject
             return count;
         }
 
-        public int GetLength() //Возврат длинны
-        {
-            return Length;
-        }
-
-        public int GetFirstIndexByValue(int value) //Возврат первый индекс по значению
+        public int GetFirstIndexByValue(int value)
         {
             for (int i = 0; i < Length; i++)
             {
@@ -228,7 +219,7 @@ namespace ListsProject
             return -1;
         }
 
-        public void Reverse() //реверс (123 -> 321)
+        public void Reverse()
         {
             for (int i = 0; i < Length / 2; i++)
             {
@@ -238,7 +229,7 @@ namespace ListsProject
             }
         }
 
-        public int FindIndexOfMaxValue() //поиск индекс максимального элемента
+        public int FindIndexOfMaxValue()
         {
             int arrayIndexMaxValue = 0;
             int arrayMaxValue = _array[0];
@@ -254,7 +245,7 @@ namespace ListsProject
             return arrayIndexMaxValue;
         }
 
-        public int FindIndexOfMinValue() //поиск индекс минимального элемента
+        public int FindIndexOfMinValue()
         {
             int arrayIndexMinValue = 0;
             int arrayMinValue = _array[0];
@@ -270,71 +261,52 @@ namespace ListsProject
             return arrayIndexMinValue;
         }
 
-        public int FindMaxValue() //поиск значения максимального элемента
+        public int FindMaxValue()
         {
             return _array[FindIndexOfMaxValue()];
         }
 
-        public int FindMinValue() //поиск значения минимального элемента
+        public int FindMinValue()
         {
             return _array[FindIndexOfMinValue()];
         }
 
         public int[] Sort(bool ascending)
         {
-            if (ascending)
-            {
-                for (int i = 0; i < Length; i++)
-                {
-                    var lessIndex = i;
-                    var lessValue = _array[i];
-                    for (int j = i + 1; j < Length; j++)
-                    {
-                        if (_array[j] < lessValue)
-                        {
-                            lessIndex = j;
-                            lessValue = _array[j];
-                        }
-                    }
+            int coef = ascending ? -1 : 1;
 
-                    _array[lessIndex] = _array[i];
-                    _array[i] = lessValue;
-                }
-            }
-            else
+            for (int i = 0; i < Length; i++)
             {
-                for (int i = 0; i < Length; i++)
-                {
-                    var greatIndex = i;
-                    var greatValue = _array[i];
-                    for (int j = i + 1; j < Length; j++)
-                    {
-                        if (_array[j] > greatValue)
-                        {
-                            greatIndex = j;
-                            greatValue = _array[j];
-                        }
-                    }
+                var lessIndex = i;
+                var lessValue = _array[i];
 
-                    _array[greatIndex] = _array[i];
-                    _array[i] = greatValue;
+                for (int j = i + 1; j < Length; j++)
+                {
+                    if (_array[j].CompareTo(lessValue) == coef)
+                    {
+                        lessIndex = j;
+                        lessValue = _array[j];
+                    }
                 }
+
+                _array[lessIndex] = _array[i];
+                _array[i] = lessValue;
             }
 
             return _array;
-        } //Сортировка по убыванию и по возрастанию
+        }
 
-        public void AddListLast(ArrayList arrayList) //добавление списка (вашего самодельного) в конец
+        public void AddListLast(ArrayList arrayList)
         {
             AddListByIndex(Length, arrayList);
         }
 
-        public void AddListFirst(ArrayList arrayList) //добавление списка в начало
+        public void AddListFirst(ArrayList arrayList)
         {
             AddListByIndex(0, arrayList);
         }
 
-        public void AddListByIndex(int index, ArrayList arrayList) //добавление списка по индексу
+        public void AddListByIndex(int index, ArrayList arrayList)
         {
             if (index > Length || index < 0)
             {
@@ -347,7 +319,7 @@ namespace ListsProject
                 Resize();
             }
 
-            MoveElements(index, Length-1, arrayList.Length);
+            MoveElements(index, Length - 1, arrayList.Length);
 
             for (int i = 0; i < arrayList.Length; ++i)
             {
@@ -398,28 +370,6 @@ namespace ListsProject
 
         }
 
-        public void Print()
-        {
-            this.PrintArray();
-            this.PrintList();
-        }
-
-        private void PrintArray() //For manual testing
-        {
-            for (int i = 0; i < _array.Length; i++)
-            {
-                Console.WriteLine($"Array[{i}] = {_array[i]}");
-            }
-        }
-
-        private void PrintList() //For manual testing
-        {
-            for (int i = 0; i < Length; i++)
-            {
-                Console.WriteLine($"List<{i}> = {_array[i]}");
-            }
-        }
-
         public override bool Equals(object obj)
         {
             if (obj is ArrayList)
@@ -444,11 +394,6 @@ namespace ListsProject
             {
                 throw new Exception();
             }
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
         }
     }
 }
