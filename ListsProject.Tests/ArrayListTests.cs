@@ -241,19 +241,6 @@ namespace ListsProject.Tests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(new[] {1, 2, 3, 4}, 4)]
-        [TestCase(new[] {1, 2, 3, 4, 6, 7, 8}, 7)]
-        [TestCase(new[] {1}, 1)]
-        [TestCase(new int[] { }, 0)]
-        public void GetLength_WhenArrayListsHasElements_CountOfElementsReturned(int[] input, int expected)
-        {
-            ArrayList arrayList = new ArrayList(input);
-
-            int actual = arrayList.GetLength();
-
-            Assert.AreEqual(expected, actual);
-        }
-
         [TestCase(new[] {1, 1, 1, 1}, 1, 0)]
         [TestCase(new[] {1, 2, 3, 4, 6, 7, 8}, 7, 5)]
         [TestCase(new[] {1}, 1, 0)]

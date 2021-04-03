@@ -14,29 +14,28 @@ namespace ListsProject
         {
             get { return this._length == 0; }
         }
+
         public int Count
         {
             get { return this._length; }
         }
+
         public int this[int index]
         {
-            get
-            {
-                return GetDLNodeByIndex(index).Data;
-            }
-            set
-            {
-                GetDLNodeByIndex(index).Data = value;
-            }
+            get { return GetDLNodeByIndex(index).Data; }
+            set { GetDLNodeByIndex(index).Data = value; }
         }
+
         public DoublyLinkedList()
         {
-            ListIsEmpty();
+            InitializeEmptyList();
         }
+
         public DoublyLinkedList(int value)
         {
             AddInEmpty(value);
         }
+
         public DoublyLinkedList(int[] values)
         {
             if (values.Length != 0)
@@ -56,15 +55,17 @@ namespace ListsProject
             }
             else
             {
-                ListIsEmpty();
+                InitializeEmptyList();
             }
         }
-        private void ListIsEmpty()
+
+        private void InitializeEmptyList()
         {
             _length = 0;
             _head = null;
             _tail = null;
         }
+
         private void AddInEmpty(int value)
         {
             _length = 1;
@@ -80,7 +81,6 @@ namespace ListsProject
             }
             else
             {
-
                 DLNode newNode = new DLNode(value);
                 _tail.Next = newNode;
                 newNode.Prev = _tail;
@@ -104,6 +104,7 @@ namespace ListsProject
                 _length++;
             }
         }
+
         public void AddByIndex(int index, int value)
         {
             if (index < 0 || index > this._length || this.Empty)
@@ -130,6 +131,7 @@ namespace ListsProject
                 _length++;
             }
         }
+
         private DLNode GetDLNodeByIndex(int index)
         {
             if (index < 0 || index >= this._length || this.Empty)
@@ -140,7 +142,7 @@ namespace ListsProject
             DLNode tmp;
             int count;
 
-            if (index <= this._length / 2 + 1)
+            if (index <= this._length / 2 + 1) //UNDONE: make this part of code without if\else
             {
                 count = 0;
                 tmp = _head;
@@ -170,75 +172,83 @@ namespace ListsProject
                     tmp = tmp.Prev;
                 }
             }
+
             return tmp;
         }
+
         public override bool Equals(object obj)
         {
-            DoublyLinkedList outcomeList = (DoublyLinkedList)obj;
-
-
-            if (this._length != outcomeList._length)
+            if (obj != null)
             {
-                return false;
-            }
-
-            DLNode current = this._head;
-            DLNode outcome = outcomeList._head;
-            if (this.Empty && current == outcome)
-            {
-                return true;
-            }
-            if (this._length == 1 && current.Data == outcome.Data)
-            {
-                return true;
-            }
-
-            do
-            {
-                if (current.Data != outcome.Data)
+                DoublyLinkedList outcomeList = (DoublyLinkedList) obj;
+                if (this._length != outcomeList._length)
                 {
                     return false;
                 }
-                current = current.Next;
-                outcome = outcome.Next;
-            }
-            while (!(current.Next is null));
 
-            current = this._tail;
-            outcome = outcomeList._tail;
-            do
-            {
-                if (current.Data != outcome.Data)
+                DLNode current = this._head;
+                DLNode outcome = outcomeList._head;
+                if (this.Empty && current == outcome)
                 {
-                    return false;
+                    return true;
                 }
-                current = current.Prev;
-                outcome = outcome.Prev;
+
+                if (this._length == 1 && current.Data == outcome.Data)
+                {
+                    return true;
+                }
+
+                do
+                {
+                    if (current.Data != outcome.Data)
+                    {
+                        return false;
+                    }
+
+                    current = current.Next;
+                    outcome = outcome.Next;
+                } while (!(current.Next is null));
+
+                current = this._tail;
+                outcome = outcomeList._tail;
+                do
+                {
+                    if (current.Data != outcome.Data)
+                    {
+                        return false;
+                    }
+
+                    current = current.Prev;
+                    outcome = outcome.Prev;
+                } while (!(current.Prev is null));
+
+                return true;
             }
-            while (!(current.Prev is null));
 
-
-
-            return true;
+            return false;
         }
 
         public override string ToString()
         {
-
             if (this.Empty)
             {
-                return String.Empty;
+                return string.Empty;
             }
-            DLNode tmp = _head;
 
-            string s = "|" + tmp.Data + "|<=>";
+            DLNode tmp = _head;
+            StringBuilder sb = new StringBuilder("| ");
+            sb.Append(Convert.ToString(tmp.Data));
+            sb.Append(" |<=>");
 
             while (!(tmp.Next is null))
             {
                 tmp = tmp.Next;
-                s += "|" + tmp.Data + "|<=>";
+                sb.Append("| ");
+                sb.Append(Convert.ToString(tmp.Data));
+                sb.Append(" |<=>");
             }
-            return s;
+
+            return Convert.ToString(sb);
         }
 
         public void AddListLast(DoublyLinkedList linkedList)
@@ -248,6 +258,7 @@ namespace ListsProject
             _tail = linkedList._tail;
             _length += linkedList._length;
         }
+
         public void AddListFirst(DoublyLinkedList linkedList)
         {
             if (!(linkedList.Empty))
@@ -274,6 +285,7 @@ namespace ListsProject
             {
                 throw new IndexOutOfRangeException();
             }
+
             if (index == 0)
             {
                 AddListFirst(linkedList);
@@ -299,16 +311,17 @@ namespace ListsProject
 
         public void RemoveFirst()
         {
-            if (!(_length == 1) && !Empty)
+            if (!(_length == 1 && Empty))
             {
                 _head = _head.Next;
                 _length--;
             }
             else
             {
-                ListIsEmpty();
+                InitializeEmptyList();
             }
         }
+
         public void RemoveLast()
         {
             if (!(_length == 1) && !Empty)
@@ -319,19 +332,20 @@ namespace ListsProject
             }
             else
             {
-                ListIsEmpty();
+                InitializeEmptyList();
             }
-
         }
+
         public void RemoveRangeFromLast(int count)
         {
             if (count > _length || count < 0)
             {
                 throw new ArgumentException("You try to remove more elements than you have in list");
             }
+
             if (count == _length)
             {
-                ListIsEmpty();
+                InitializeEmptyList();
             }
             else if (count != 0)
             {
@@ -353,7 +367,6 @@ namespace ListsProject
             {
                 int index = count - 1;
                 DLNode tmp = GetDLNodeByIndex(index - 1);
-
                 _head = tmp.Next.Next;
                 tmp.Next = null;
                 _length -= count;
@@ -384,22 +397,20 @@ namespace ListsProject
             {
                 DLNode from = null;
                 DLNode to = _head;
-
                 for (int i = 0; i < index + count; i++)
                 {
                     if (i == index - 1)
                     {
                         from = to;
                     }
+
                     to = to.Next;
                 }
 
                 from.Next = to;
                 to.Prev = from;
-
                 _length -= count;
             }
-
         }
 
         public void RemoveByIndex(int index)
@@ -408,6 +419,7 @@ namespace ListsProject
             {
                 throw new IndexOutOfRangeException();
             }
+
             if (index == 0)
             {
                 this.RemoveFirst();
@@ -418,7 +430,6 @@ namespace ListsProject
             }
             else
             {
-
                 DLNode tmp = GetDLNodeByIndex(index - 1);
                 if (!(tmp.Next.Next is null))
                 {
@@ -433,26 +444,28 @@ namespace ListsProject
                 }
             }
         }
+
         public int GetFirstIndexByValue(int value)
         {
-
             if (Empty)
             {
                 return -1;
             }
-            DLNode tmp = _head;
 
+            DLNode tmp = _head;
             for (int i = 0; i < _length; i++)
             {
                 if (tmp.Data == value)
                 {
                     return i;
                 }
+
                 tmp = tmp.Next;
             }
 
             return -1;
         }
+
         public int[] FindMaxValueAndItIndex()
         {
             DLNode tmp = _head;
@@ -472,7 +485,6 @@ namespace ListsProject
 
             result[0] = maxValueIndex;
             result[1] = maxValue;
-
             return result;
         }
 
@@ -562,6 +574,7 @@ namespace ListsProject
                     count++;
                     _length--;
                 }
+
                 if (current == _tail && current.Data == value)
                 {
                     tmp.Next = null;
@@ -569,8 +582,10 @@ namespace ListsProject
                     count++;
                     _length--;
                 }
+
                 current = tmp.Next;
             }
+
             return count;
         }
 
@@ -581,7 +596,6 @@ namespace ListsProject
                 DLNode previousNode = null;
                 DLNode currentNode = this._head;
                 DLNode nextNode = null;
-
                 while (currentNode != null)
                 {
                     nextNode = currentNode.Next;
@@ -590,13 +604,13 @@ namespace ListsProject
                     previousNode = currentNode;
                     currentNode = nextNode;
                 }
+
                 _tail = _head;
                 _head = previousNode;
             }
-
         }
 
-        public void Sort(bool ascending) //Bubble Sort))
+        public void Sort(bool ascending)
         {
             DLNode current = null, index = null;
             int tempData;
@@ -633,7 +647,6 @@ namespace ListsProject
                 return;
             }
         }
-
     }
-}
+}   
 

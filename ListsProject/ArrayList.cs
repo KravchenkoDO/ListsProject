@@ -5,34 +5,39 @@ namespace ListsProject
     public class ArrayList
     {
         public int Length { get; private set; }
-
         private int[] _array;
 
         public int this[int index]
         {
             get
             {
-                if (index > Length || index < 0) throw new IndexOutOfRangeException();
-                else return _array[index];
+                if (index > Length || index < 0)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                return _array[index];
             }
             set
             {
-                if (index > Length || index < 0) throw new IndexOutOfRangeException();
-                else _array[index] = value;
+                if (index > Length || index < 0)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                _array[index] = value;
             }
         }
 
         public ArrayList()
         {
             Length = 0;
-
             _array = new int[10];
         }
 
         public ArrayList(int value)
         {
             Length = 1;
-
             _array = new int[10];
             _array[0] = value;
         }
@@ -42,16 +47,13 @@ namespace ListsProject
             if (!(arrayValues is null))
             {
                 Length = arrayValues.Length;
-
                 _array = new int[Length];
-
                 Resize();
                 for (int i = 0; i < Length; i++)
                 {
                     _array[i] = arrayValues[i];
                 }
             }
-
         }
 
         public void Add(int value)
@@ -63,7 +65,6 @@ namespace ListsProject
 
             _array[Length] = value;
             Length++;
-
         }
 
         public void AddByIndex(int index, int value)
@@ -80,7 +81,6 @@ namespace ListsProject
 
             MoveElements(index, Length, 1);
             _array[index] = value;
-
         }
 
         public void AddFirst(int value)
@@ -90,27 +90,22 @@ namespace ListsProject
 
         public void RemoveLast()
         {
-            if (Length == 0)
+            if (Length != 0)
             {
-                throw new IndexOutOfRangeException();
+                Length--;
+                if (Length < _array.Length / 2)
+                {
+                    Resize();
+                }
             }
-
-            Length--;
-            if (Length < _array.Length / 2)
-            {
-                Resize();
-            }
-
         }
 
         public void RemoveFirst()
         {
-            if (Length == 0)
+            if (Length != 0)
             {
-                throw new IndexOutOfRangeException();
+                RemoveByIndex(0);
             }
-
-            RemoveByIndex(0);
         }
 
         public void RemoveByIndex(int index)
@@ -126,7 +121,6 @@ namespace ListsProject
             {
                 Resize();
             }
-
         }
 
         public void RemoveRangeFromLast(int count)
@@ -367,12 +361,11 @@ namespace ListsProject
                     _array[i] = _array[i - count];
                 }
             }
-
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is ArrayList)
+            if (obj != null)
             {
                 ArrayList arrayList = (ArrayList) obj;
                 if (this.Length != arrayList.Length)
@@ -390,10 +383,8 @@ namespace ListsProject
 
                 return true;
             }
-            else
-            {
-                throw new Exception();
-            }
+
+            return false;
         }
     }
 }

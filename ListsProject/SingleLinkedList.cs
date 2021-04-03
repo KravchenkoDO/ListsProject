@@ -1,24 +1,20 @@
 ﻿using System;
 
-
 namespace ListsProject
 {
     public class SingleLinkedList
     {
         private int _length;
         private Node _head; 
-        private Node _tail; 
-
+        private Node _tail;
         public bool Empty
         {
             get { return this._length == 0; }
         }
-
         public int Count
         {
             get { return this._length; }
         }
-
         public int this[int index]
         {
             get
@@ -30,26 +26,21 @@ namespace ListsProject
                 GetNodeByIndex(index).Data = value;
             }
         }
-
         public SingleLinkedList()
         {
-            ListIsEmpty();
+            InitializeEmptyList();
         }
-
         public SingleLinkedList(int value)
         {
             AddInEmpty(value);
         }
-
         public SingleLinkedList(int[] values)
         {
-
             if (values.Length != 0)
             {
                 _length = values.Length;
                 _head = new Node(values[0]);
                 _tail = _head;
-
                 for (int i = 1; i < values.Length; i++)
                 {
                     _tail.Next = new Node(values[i]);
@@ -58,26 +49,21 @@ namespace ListsProject
             }
             else
             {
-                ListIsEmpty();
+                InitializeEmptyList();
             }
-
-
         }
-
-        private void ListIsEmpty()
+        private void InitializeEmptyList()
         {
             _length = 0;
             _head = null;
             _tail = null;
         }
-
         private void AddInEmpty(int value)
         {
             _length = 1;
             _head = new Node(value);
             _tail = _head;
         }
-
         private Node GetNodeByIndex(int index)
         {
             if (index < 0 || index >= this._length || this.Empty)
@@ -86,14 +72,12 @@ namespace ListsProject
             }
 
             Node tmp = _head;
-
             for (int i = 0; i < index; i++)
             {
                 tmp = tmp.Next;
             }
 
             return tmp;
-
         }
 
         public void Add(int value)
@@ -171,10 +155,8 @@ namespace ListsProject
             else
             {
                 Node tmp = this.GetNodeByIndex(index - 1);
-
                 tmp.Next = tmp.Next.Next;
                 _length--;
-
             }
         }
 
@@ -184,9 +166,10 @@ namespace ListsProject
             {
                 throw new ArgumentException("You try to remove more elements than you have in list");
             }
+
             if (count == _length)
             {
-                ListIsEmpty();
+                InitializeEmptyList();
             }
             else
             {
@@ -209,7 +192,6 @@ namespace ListsProject
             {
                 int index = count - 1;
                 Node tmp = GetNodeByIndex(index - 1);
-
                 _head = tmp.Next.Next;
                 tmp.Next = null;
                 _length -= count;
@@ -222,10 +204,12 @@ namespace ListsProject
             {
                 throw new IndexOutOfRangeException();
             }
+
             if (index + count > _length || count < 0)
             {
                 throw new ArgumentException("You try to remove more elements than you have in list!");
             }
+
             if (index == 0)
             {
                 RemoveRangeFromFirst(count);
@@ -234,18 +218,17 @@ namespace ListsProject
             {
                 Node from = null;
                 Node to = _head;
-
                 for (int i = 0; i < index + count; i++)
                 {
                     if (i == index - 1)
                     {
                         from = to;
                     }
+
                     to = to.Next;
                 }
 
                 from.Next = to;
-
                 if (index + count == _length)
                 {
                     _tail = to;
@@ -253,43 +236,41 @@ namespace ListsProject
 
                 _length -= count;
             }
-
         }
 
         public override string ToString()
         {
-
             if (this.Empty)
             {
                 return String.Empty;
             }
+
             Node tmp = _head;
-
             string s = "|" + tmp.Data + "|=>";
-
             while (!(tmp.Next is null))
             {
                 tmp = tmp.Next;
                 s += "|" + tmp.Data + "|=>";
             }
+
             return s;
         }
 
         public int GetFirstIndexByValue(int value)
         {
-
             if (Empty)
             {
                 return -1;
             }
-            Node tmp = _head;
 
+            Node tmp = _head;
             for (int i = 0; i < _length; i++)
             {
                 if (tmp.Data == value)
                 {
                     return i;
                 }
+
                 tmp = tmp.Next;
             }
 
@@ -298,9 +279,7 @@ namespace ListsProject
 
         public override bool Equals(object obj)
         {
-            SingleLinkedList outcomeList = (SingleLinkedList)obj;
-
-
+            SingleLinkedList outcomeList = (SingleLinkedList) obj;
             if (this._length != outcomeList._length)
             {
                 return false;
@@ -312,6 +291,7 @@ namespace ListsProject
             {
                 return true;
             }
+
             if (this._length == 1 && current.Data == outcome.Data)
             {
                 return true;
@@ -323,10 +303,10 @@ namespace ListsProject
                 {
                     return false;
                 }
+
                 current = current.Next;
                 outcome = outcome.Next;
-            }
-            while (!(current.Next is null));
+            } while (!(current.Next is null));
 
             return true;
         }
@@ -350,7 +330,6 @@ namespace ListsProject
 
             result[0] = maxValueIndex;
             result[1] = maxValue;
-
             return result;
         }
 
@@ -373,7 +352,6 @@ namespace ListsProject
 
             result[0] = minValueIndex;
             result[1] = minValue;
-
             return result;
         }
 
@@ -385,14 +363,12 @@ namespace ListsProject
             {
                 RemoveFirst();
                 return 0;
-
             }
 
             for (int i = 1; i < _length; i++)
             {
                 if (tmp.Next.Data == value)
                 {
-
                     if (_tail != tmp.Next)
                     {
                         tmp.Next = tmp.Next.Next;
@@ -415,14 +391,11 @@ namespace ListsProject
             return index;
         }
 
-
-
         public int RemoveAllByValue(int value)
         {
             int count = 0;
             Node tmp;
             Node current = _head;
-
             while (!(current is null) && current.Data == value)
             {
                 RemoveFirst();
@@ -440,6 +413,7 @@ namespace ListsProject
                     count++;
                     _length--;
                 }
+
                 if (current == _tail && current.Data == value)
                 {
                     tmp.Next = null;
@@ -447,18 +421,20 @@ namespace ListsProject
                     count++;
                     _length--;
                 }
+
                 current = tmp.Next;
             }
-                return count;
+
+            return count;
         }
 
         public void AddListLast(SingleLinkedList linkedList)
         {
-
             this._tail.Next = linkedList._head;
             this._tail = linkedList._tail;
             this._length += linkedList._length;
         }
+
         public void AddListFirst(SingleLinkedList linkedList)
         {
             if (!(linkedList.Empty))
@@ -469,11 +445,11 @@ namespace ListsProject
                 }
                 else
                 {
-                Node tmp = this._head;
+                    Node tmp = this._head;
 
-                this._head = linkedList._head;
-                linkedList._tail.Next = tmp;
-                linkedList._tail = this._tail;
+                    this._head = linkedList._head;
+                    linkedList._tail.Next = tmp;
+                    linkedList._tail = this._tail;
                 }
 
                 this._length += linkedList._length;
@@ -486,6 +462,7 @@ namespace ListsProject
             {
                 throw new IndexOutOfRangeException();
             }
+
             if (index == 0)
             {
                 AddListFirst(linkedList);
@@ -505,41 +482,38 @@ namespace ListsProject
                 tmp.Next = linkedList._head;
                 this._length += linkedList._length;
             }
-
         }
 
         public void Reverse()
         {
             if (!(this.Empty))
-            { 
-            Node previousNode = null;
-            Node currentNode = this._head;
-            Node nextNode = null;
-
-            while (currentNode != null)
             {
+                Node previousNode = null;
+                Node currentNode = this._head;
+                Node nextNode = null;
+                while (currentNode != null)
+                {
                     nextNode = currentNode.Next;
                     currentNode.Next = previousNode;
                     previousNode = currentNode;
                     currentNode = nextNode;
-            }
-            _head = previousNode;
+                }
+
+                _head = previousNode;
             }
         }
 
         public void Sort(bool ascending)
         {
-
             Node sorted = null;
             Node current = _head;
-
             while (current != null)
             {
-                
+
                 Node next = current.Next;
-                
+
                 sortedInsert(current);
-                
+
                 current = next;
             }
 
