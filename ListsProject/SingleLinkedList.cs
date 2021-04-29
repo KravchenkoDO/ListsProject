@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Text;
 
 namespace ListsProject
 {
-    public class SingleLinkedList
+    public class SingleLinkedList : IList
     {
         private int _length;
-        private Node _head; 
+        private Node _head;
         private Node _tail;
         public bool Empty
         {
@@ -17,14 +18,8 @@ namespace ListsProject
         }
         public int this[int index]
         {
-            get
-            {
-                return GetNodeByIndex(index).Data;
-            }
-            set
-            {
-                GetNodeByIndex(index).Data = value;
-            }
+            get { return GetNodeByIndex(index).Data; }
+            set { GetNodeByIndex(index).Data = value; }
         }
         public SingleLinkedList()
         {
@@ -79,7 +74,6 @@ namespace ListsProject
 
             return tmp;
         }
-
         public void Add(int value)
         {
             if (this.Empty)
@@ -93,7 +87,6 @@ namespace ListsProject
                 _tail = _tail.Next;
             }
         }
-
         public void AddFirst(int value)
         {
             if (Empty)
@@ -108,10 +101,9 @@ namespace ListsProject
                 _head = tmp;
             }
         }
-
         public void AddByIndex(int index, int value)
         {
-            if (index < 0 || index > this._length || this.Empty)
+            if (index < 0 || index > this._length)
             {
                 throw new IndexOutOfRangeException();
             }
@@ -129,26 +121,36 @@ namespace ListsProject
                 _length++;
             }
         }
-
         public void RemoveFirst()
         {
-            _head = _head.Next;
-            _length--;
-        }
-
-        public void RemoveLast()
-        {
-            RemoveByIndex(_length - 1);
-        }
-
-        public void RemoveByIndex(int index)
-        {
-            if (index < 0 || index > this._length || this.Empty)
+            if (!(this.Empty) || _length != 0)
+            {
+                _head = _head.Next;
+                _length--;
+            }
+            else
             {
                 throw new IndexOutOfRangeException();
             }
-
-            if (index == 0)
+        }
+        public void RemoveLast()
+        {
+            if (!(this.Empty) || _length != 0)
+            { 
+            RemoveByIndex(_length - 1);
+            }
+            else
+            {
+                throw new IndexOutOfRangeException();
+            }
+        }
+        public void RemoveByIndex(int index)
+        {
+            if (index < 0 || index > this._length-1 || this.Empty)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            else if (index == 0)
             {
                 this.RemoveFirst();
             }
@@ -159,7 +161,6 @@ namespace ListsProject
                 _length--;
             }
         }
-
         public void RemoveRangeFromLast(int count)
         {
             if (count > _length || count < 0)
@@ -180,7 +181,6 @@ namespace ListsProject
                 _length = _length - count;
             }
         }
-
         public void RemoveRangeFromFirst(int count)
         {
             if (count > _length || count < 0)
@@ -197,10 +197,9 @@ namespace ListsProject
                 _length -= count;
             }
         }
-
         public void RemoveRangeFromIndex(int index, int count)
         {
-            if (index < 0 || index > this._length || this.Empty)
+            if (index < 0 || index > this._length - 1 || this.Empty)
             {
                 throw new IndexOutOfRangeException();
             }
@@ -237,25 +236,24 @@ namespace ListsProject
                 _length -= count;
             }
         }
-
         public override string ToString()
         {
             if (this.Empty)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             Node tmp = _head;
-            string s = "|" + tmp.Data + "|=>";
+            StringBuilder sb = new StringBuilder(string.Empty);
+            sb.Append($"{tmp.Data} ");
             while (!(tmp.Next is null))
             {
                 tmp = tmp.Next;
-                s += "|" + tmp.Data + "|=>";
+                sb.Append($"{tmp.Data} ");
             }
 
-            return s;
+            return sb.ToString().Trim();
         }
-
         public int GetFirstIndexByValue(int value)
         {
             if (Empty)
@@ -276,7 +274,6 @@ namespace ListsProject
 
             return -1;
         }
-
         public override bool Equals(object obj)
         {
             SingleLinkedList outcomeList = (SingleLinkedList) obj;
@@ -310,51 +307,6 @@ namespace ListsProject
 
             return true;
         }
-
-        public int[] FindMaxValueAndItIndex()
-        {
-            Node tmp = _head;
-            int[] result = new int[2];
-            int maxValueIndex = 0;
-            int maxValue = tmp.Data;
-            for (int i = 0; i < _length; i++)
-            {
-                if (tmp.Data > maxValue)
-                {
-                    maxValueIndex = i;
-                    maxValue = tmp.Data;
-                }
-
-                tmp = tmp.Next;
-            }
-
-            result[0] = maxValueIndex;
-            result[1] = maxValue;
-            return result;
-        }
-
-        public int[] FindMinValueAndItIndex()
-        {
-            Node tmp = _head;
-            int[] result = new int[2];
-            int minValueIndex = 0;
-            int minValue = tmp.Data;
-            for (int i = 0; i < _length; i++)
-            {
-                if (tmp.Data < minValue)
-                {
-                    minValueIndex = i;
-                    minValue = tmp.Data;
-                }
-
-                tmp = tmp.Next;
-            }
-
-            result[0] = minValueIndex;
-            result[1] = minValue;
-            return result;
-        }
-
         public int RemoveFirstByValue(int value)
         {
             Node tmp = _head;
@@ -390,7 +342,6 @@ namespace ListsProject
 
             return index;
         }
-
         public int RemoveAllByValue(int value)
         {
             int count = 0;
@@ -427,63 +378,6 @@ namespace ListsProject
 
             return count;
         }
-
-        public void AddListLast(SingleLinkedList linkedList)
-        {
-            this._tail.Next = linkedList._head;
-            this._tail = linkedList._tail;
-            this._length += linkedList._length;
-        }
-
-        public void AddListFirst(SingleLinkedList linkedList)
-        {
-            if (!(linkedList.Empty))
-            {
-                if (this.Empty)
-                {
-                    this._head = linkedList._head;
-                }
-                else
-                {
-                    Node tmp = this._head;
-
-                    this._head = linkedList._head;
-                    linkedList._tail.Next = tmp;
-                    linkedList._tail = this._tail;
-                }
-
-                this._length += linkedList._length;
-            }
-        }
-
-        public void AddListByIndex(int index, SingleLinkedList linkedList)
-        {
-            if (index < 0 || index > this._length)
-            {
-                throw new IndexOutOfRangeException();
-            }
-
-            if (index == 0)
-            {
-                AddListFirst(linkedList);
-            }
-            else if (index == this._length)
-            {
-                AddListLast(linkedList);
-            }
-            else if (this.Empty)
-            {
-                linkedList.ToString();
-            }
-            else
-            {
-                Node tmp = GetNodeByIndex(index - 1);
-                linkedList._tail.Next = tmp.Next;
-                tmp.Next = linkedList._head;
-                this._length += linkedList._length;
-            }
-        }
-
         public void Reverse()
         {
             if (!(this.Empty))
@@ -502,7 +396,72 @@ namespace ListsProject
                 _head = previousNode;
             }
         }
+        public int FindMaxValue()
+        {
+            Node tmp = _head;
+            int maxValue = tmp.Data;
+            for (int i = 0; i < _length; i++)
+            {
+                if (tmp.Data > maxValue)
+                {
+                    maxValue = tmp.Data;
+                }
+                tmp = tmp.Next;
+            }
+            return maxValue;
+        }
+        public int FindMinValue()
+        {
+            Node tmp = _head;
+            int minValue = tmp.Data;
+            for (int i = 0; i < _length; i++)
+            {
+                if (tmp.Data < minValue)
+                {
+                    minValue = tmp.Data;
+                }
 
+                tmp = tmp.Next;
+            }
+
+            return minValue;
+        }
+        public int FindIndexOfMaxValue()
+        {
+            Node tmp = _head;
+            int maxValueIndex = 0;
+            int maxValue = tmp.Data;
+            for (int i = 0; i < _length; i++)
+            {
+                if (tmp.Data > maxValue)
+                {
+                    maxValue = tmp.Data;
+                    maxValueIndex = i;
+                }
+
+                tmp = tmp.Next;
+            }
+
+            return maxValueIndex;
+        }
+        public int FindIndexOfMinValue()
+        {
+            Node tmp = _head;
+            int minValueIndex = 0;
+            int minValue = tmp.Data;
+            for (int i = 0; i < _length; i++)
+            {
+                if (tmp.Data < minValue)
+                {
+                    minValueIndex = i;
+                    minValue = tmp.Data;
+                }
+
+                tmp = tmp.Next;
+            }
+
+            return minValueIndex;
+        }
         public void Sort(bool ascending)
         {
             Node sorted = null;
@@ -511,9 +470,7 @@ namespace ListsProject
             {
 
                 Node next = current.Next;
-
                 sortedInsert(current);
-
                 current = next;
             }
 
@@ -563,8 +520,63 @@ namespace ListsProject
                         newnode.Next = current.Next;
                         current.Next = newnode;
                     }
-
                 }
+            }
+        }
+        public void AddListLast(IList listForAdd)
+        {
+            SingleLinkedList singleLinkedList = (SingleLinkedList)listForAdd;
+            this._tail.Next = singleLinkedList._head;
+            this._tail = singleLinkedList._tail;
+            this._length += singleLinkedList._length;
+        }
+        public void AddListFirst(IList listForAdd)
+        {
+            SingleLinkedList singleLinkedList = (SingleLinkedList)listForAdd;
+            if (!(singleLinkedList.Empty))
+            {
+                if (this.Empty)
+                {
+                    this._head = singleLinkedList._head;
+                }
+                else
+                {
+                    Node tmp = this._head;
+
+                    this._head = singleLinkedList._head;
+                    singleLinkedList._tail.Next = tmp;
+                    singleLinkedList._tail = this._tail;
+                }
+
+                this._length += singleLinkedList._length;
+            }
+        }
+        public void AddListByIndex(int index, IList listForAdd)
+        {
+            SingleLinkedList singleLinkedList = (SingleLinkedList)listForAdd;
+            if (index < 0 || index > this._length)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            if (index == 0)
+            {
+                AddListFirst(singleLinkedList);
+            }
+            else if (index == this._length)
+            {
+                AddListLast(singleLinkedList);
+            }
+            else if (this.Empty)
+            {
+                singleLinkedList.ToString();
+            }
+            else
+            {
+                Node tmp = GetNodeByIndex(index - 1);
+                singleLinkedList._tail.Next = tmp.Next;
+                tmp.Next = singleLinkedList._head;
+                this._length += singleLinkedList._length;
             }
         }
     }
