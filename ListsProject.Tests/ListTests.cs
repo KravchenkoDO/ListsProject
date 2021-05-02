@@ -10,47 +10,25 @@ namespace ListsProject.Tests
     [TestFixture("DoublyLinkedList")]
     public class ListTests
     {
-        IList actual;
-        IList expected;
-        IList list;
         string listType = "";
 
         public ListTests(string type)
         {
             listType = type;
         }
-        public void Setup(int[] inputArray, int[] expectedArray)
+
+        public IList InitialList(int[] inputArray)
         {
             switch (listType)
             {
                 case "ArrayList":
-                    actual = new ArrayList(inputArray);
-                    expected = new ArrayList(expectedArray);
-                    break;
+                    return new ArrayList(inputArray);
                 case "SingleLinkedList":
-                    actual = new SingleLinkedList(inputArray);
-                    expected = new SingleLinkedList(expectedArray);
-                    break;
+                    return new SingleLinkedList(inputArray);
                 case "DoublyLinkedList":
-                    actual = new DoublyLinkedList(inputArray);
-                    expected = new DoublyLinkedList(expectedArray);
-                    break;
+                    return new DoublyLinkedList(inputArray);
             }
-        }
-        public void InitialList(int[] inputArray)
-        {
-            switch (listType)
-            {
-                case "ArrayList":
-                    list = new ArrayList(inputArray);
-                    break;
-                case "SingleLinkedList":
-                    list = new SingleLinkedList(inputArray);
-                    break;
-                case "DoublyLinkedList":
-                    list = new DoublyLinkedList(inputArray);
-                    break;
-            }
+            return new ArrayList(inputArray);
         }
 
         [TestCase(new[] { 1, 2, 5, 3 }, 6, new[] { 1, 2, 5, 3, 6 })]
@@ -60,9 +38,10 @@ namespace ListsProject.Tests
         [TestCase(new int[] { 1, 9, 11 }, 0, new[] { 1, 9, 11, 0 })]
         public void Add_WhenAddElementInList_ListWithNewElementInTheEndReturned(int[] input, int value, int[] output)
         {
-            Setup(input, output);
-
+            IList actual = InitialList(input);
             actual.Add(value);
+
+            IList expected = InitialList(output);
 
             Assert.AreEqual(expected, actual);
         }
@@ -74,9 +53,10 @@ namespace ListsProject.Tests
         public void AddByIndex_WhenAddElementByIndexInList_ListWithNewElementInTheIndexPositionReturned(
             int[] input, int index, int value, int[] output)
         {
-            Setup(input, output);
-
+            IList actual = InitialList(input);
             actual.AddByIndex(index, value);
+
+            IList expected = InitialList(output);
 
             Assert.AreEqual(expected, actual);
         }
@@ -88,7 +68,7 @@ namespace ListsProject.Tests
                 int[] input,
                 int index, int value)
         {
-            InitialList(input);
+            IList actual = InitialList(input);
 
             Assert.Throws<IndexOutOfRangeException>(() => actual.AddByIndex(index, value));
         }
@@ -99,9 +79,10 @@ namespace ListsProject.Tests
         public void AddFirst_WhenAddFirstElementInList_ListWithNewElementInTheFirstPositionReturned(int[] input,
             int value, int[] output)
         {
-            Setup(input, output);
-
+            IList actual = InitialList(input);
             actual.AddFirst(value);
+
+            IList expected = InitialList(output);
 
             Assert.AreEqual(expected, actual);
         }
@@ -111,9 +92,10 @@ namespace ListsProject.Tests
         public void RemoveLast_WhenRemoveLastElementInList_ListWithoutElementInLastPositionReturned(int[] input,
            int[] output)
         {
-            Setup(input, output);
-
+            IList actual = InitialList(input);
             actual.RemoveLast();
+
+            IList expected = InitialList(output);
 
             Assert.AreEqual(expected, actual);
         }
@@ -121,7 +103,7 @@ namespace ListsProject.Tests
         [TestCase(new int[] { })]
         public void RemoveLast_WhenRemoveLastElementInEmptyList_IndexOutOfRangeExceptionReturned(int[] input)
         {
-            InitialList(input);
+            IList actual = InitialList(input);
 
             Assert.Throws<IndexOutOfRangeException>(() => actual.RemoveLast());
         }
@@ -132,9 +114,10 @@ namespace ListsProject.Tests
         public void RemoveFirst_WhenRemoveFirstElementInList_ListWithoutElementInFirstPositionReturned(int[] input,
             int[] output)
         {
-            Setup(input, output);
-
+            IList actual = InitialList(input);
             actual.RemoveFirst();
+
+            IList expected = InitialList(output);
 
             Assert.AreEqual(expected, actual);
         }
@@ -142,9 +125,9 @@ namespace ListsProject.Tests
         [TestCase(new int[] { })]
         public void RemoveFirst_WhenRemoveFirstElementInEmptyList_IndexOutOfRangeExceptionReturned(int[] input)
         {
-            InitialList(input);
+            IList actual = InitialList(input);
 
-            Assert.Throws<IndexOutOfRangeException>(() => list.RemoveFirst());
+            Assert.Throws<IndexOutOfRangeException>(() => actual.RemoveFirst());
         }
 
         [TestCase(new[] { 1, 2, 3, 4 }, 3, new[] { 1, 2, 3 })]
@@ -153,9 +136,10 @@ namespace ListsProject.Tests
         public void RemoveByIndex_WhenRemoveElementByIndexInList_ListWithoutElementInTheIndexPositionReturned(
             int[] input, int index, int[] output)
         {
-            Setup(input, output);
-
+            IList actual = InitialList(input);
             actual.RemoveByIndex(index);
+
+            IList expected = InitialList(output);
 
             Assert.AreEqual(expected, actual);
         }
@@ -165,7 +149,7 @@ namespace ListsProject.Tests
         public void RemoveByIndex_WhenRemoveElementByIndexLessThen0OrGreaterThenLastElementIndex_IndexOutOfRangeExceptionReturned(
                 int[] input, int index)
         {
-            InitialList(input);
+            IList actual = InitialList(input);
 
             Assert.Throws<IndexOutOfRangeException>(() => actual.RemoveByIndex(index));
         }
@@ -177,9 +161,10 @@ namespace ListsProject.Tests
             RemoveRangeFromLast_WhenRemoveRangeOfElementsFromLastOfList_ListWithoutCountElementsInThisRangeFromEndReturned(
                 int[] input, int count, int[] output)
         {
-            Setup(input, output);
-
+            IList actual = InitialList(input);
             actual.RemoveRangeFromLast(count);
+
+            IList expected = InitialList(output);
 
             Assert.AreEqual(expected, actual);
         }
@@ -189,9 +174,9 @@ namespace ListsProject.Tests
         public void RemoveRangeFromLast_WhenRangeGreaterThenLengthOrLessThen0_ArgumentExceptionReturned(
             int[] input, int count)
         {
-            InitialList(input);
+            IList actual = InitialList(input); 
 
-            Assert.Throws<ArgumentException>(() => list.RemoveRangeFromLast(count));
+            Assert.Throws<ArgumentException>(() => actual.RemoveRangeFromLast(count));
         }
 
         [TestCase(new[] { 1, 2, 3, 4 }, 2, new[] { 3, 4 })]
@@ -201,9 +186,10 @@ namespace ListsProject.Tests
             RemoveRangeFromFirst_WhenRemoveRangeOfElementsFromFirstOfList_ListWithoutCountElementsInThisRangeFromBeginReturned(
                 int[] input, int count, int[] output)
         {
-            Setup(input, output);
-
+            IList actual = InitialList(input);
             actual.RemoveRangeFromFirst(count);
+
+            IList expected = InitialList(output);
 
             Assert.AreEqual(expected, actual);
         }
@@ -213,7 +199,7 @@ namespace ListsProject.Tests
         public void RemoveRangeFromFirst_WhenRangeGreaterThenLengthOrLessThen0_ArgumentExceptionReturned(
             int[] input, int count)
         {
-            InitialList(input);
+            IList actual = InitialList(input);
 
             Assert.Throws<ArgumentException>(() => actual.RemoveRangeFromFirst(count));
         }
@@ -226,7 +212,8 @@ namespace ListsProject.Tests
             RemoveRangeFromIndex_WhenRemoveRangeOfElementsFromIndexOfList_ListWithoutCountElementsInThisRangeFromIndexReturned(
                 int[] input, int index, int count, int[] output)
         {
-            Setup(input, output);
+            IList actual = InitialList(input);
+            IList expected = InitialList(output);
 
             actual.RemoveRangeFromIndex(index, count);
 
@@ -238,7 +225,7 @@ namespace ListsProject.Tests
         public void RemoveRangeFromIndex_WhenRangeGreaterThenLengthOrLessThen0_ArgumentExceptionReturned(int[] input,
             int index, int count)
         {
-            InitialList(input);
+            IList actual = InitialList(input);
 
             Assert.Throws<ArgumentException>(() => actual.RemoveRangeFromIndex(index, count));
         }
@@ -249,7 +236,7 @@ namespace ListsProject.Tests
             RemoveRangeFromIndex_WhenIndexLessThen0OrGreaterThatLastValueIndex_IndexOutOfRangeExceptionReturned(
                 int[] input, int index, int count)
         {
-            InitialList(input);
+            IList actual = InitialList(input);
 
             Assert.Throws<IndexOutOfRangeException>(() => actual.RemoveRangeFromIndex(index, count));
         }
@@ -260,11 +247,11 @@ namespace ListsProject.Tests
         public void RemoveFirstByValue_WhenFirstValueFoundRemoveItFromList_IndexOfThatValueReturned(int[] input,
             int value, int expected)
         {
-            InitialList(input);
+            IList list = InitialList(input);
 
-            int fact = list.RemoveFirstByValue(value);
+            int actual = list.RemoveFirstByValue(value);
 
-            Assert.AreEqual(expected, fact);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase(new[] { 1, 2, 3, 5 }, 5, 1)]
@@ -274,11 +261,11 @@ namespace ListsProject.Tests
         public void RemoveAllByValue_WhenValuesFoundRemoveItFromList_CountOfThatValuesReturned(int[] input, int value,
             int expected)
         {
-            InitialList(input);
+            IList list = InitialList(input);
 
-            int fact = list.RemoveAllByValue(value);
+            int actual = list.RemoveAllByValue(value);
 
-            Assert.AreEqual(expected, fact);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase(new[] { 1, 1, 1, 1 }, 1, 0)]
@@ -288,11 +275,11 @@ namespace ListsProject.Tests
         public void GetFirstIndexByValue_WhenArrayListsContainValues_IndexOfFirstFoundValueReturned(int[] input,
             int value, int expected)
         {
-            InitialList(input);
+            IList list = InitialList(input);
 
-            int fact = list.GetFirstIndexByValue(value);
+            int actual = list.GetFirstIndexByValue(value);
 
-            Assert.AreEqual(expected, fact);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase(new[] { 1, 2, 3, 4 }, new[] { 4, 3, 2, 1 })]
@@ -301,7 +288,8 @@ namespace ListsProject.Tests
         [TestCase(new[] { 0 }, new[] { 0 })]
         public void Reverse_WhenArrayList_ReversedArrayListReturned(int[] input, int[] output)
         {
-            Setup(input, output);
+            IList actual = InitialList(input);
+            IList expected = InitialList(output);
 
             actual.Reverse();
 
@@ -313,11 +301,11 @@ namespace ListsProject.Tests
         [TestCase(new[] { 0 }, 0)]
         public void FindIndexOfMaxValue_WhenFindListMaxValue_IndexOfMaxValueReturned(int[] input, int expected)
         {
-            InitialList(input);
+            IList list = InitialList(input);
 
-            int fact = list.FindIndexOfMaxValue();
+            int actual = list.FindIndexOfMaxValue();
 
-            Assert.AreEqual(expected, fact);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase(new[] { 1, 10, 15 }, 15)]
@@ -326,11 +314,11 @@ namespace ListsProject.Tests
         [TestCase(new[] { 0 }, 0)]
         public void FindMaxValue_WhenArrayListHasElements_MaxValueReturned(int[] input, int expected)
         {
-            InitialList(input);
+            IList list = InitialList(input);
 
-            int fact = list.FindMaxValue();
+            int actual = list.FindMaxValue();
 
-            Assert.AreEqual(expected, fact);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase(new[] { 1, 2, 3, 4 }, 0)]
@@ -338,11 +326,11 @@ namespace ListsProject.Tests
         [TestCase(new[] { 55, 10, 5 }, 2)]
         public void FindIndexOfMinValue_WhenFindListMinValue_IndexOfMinValueReturned(int[] input, int expected)
         {
-            InitialList(input);
+            IList list = InitialList(input);
 
-            int fact = list.FindIndexOfMinValue();
+            int actual = list.FindIndexOfMinValue();
 
-            Assert.AreEqual(expected, fact);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase(new[] { 1, 2, 3, 4 }, 1)]
@@ -350,11 +338,11 @@ namespace ListsProject.Tests
         [TestCase(new[] { 55, 10, 5 }, 5)]
         public void FindMinValue_WhenArrayListHasElements_MinValueReturned(int[] input, int expected)
         {
-            InitialList(input);
+            IList list = InitialList(input);
 
-            int fact = list.FindMinValue();
+            int actual = list.FindMinValue();
 
-            Assert.AreEqual(expected, fact);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase(new[] { 1, 3, 5, 7, 8 }, false, new[] { 8, 7, 5, 3, 1 })]
@@ -366,7 +354,8 @@ namespace ListsProject.Tests
         public void Sort_WhenArrayList_SortedArrayListByDescendingReturned(int[] input, bool ascending,
             int[] output)
         {
-            Setup(input, output);
+            IList actual = InitialList(input);
+            IList expected = InitialList(output);
 
             actual.Sort(ascending);
 
@@ -380,10 +369,11 @@ namespace ListsProject.Tests
         public void AddListByIndex_WhenToListAddAnotherListByIndex_ListWithInsertedInIndexListReturned(int[] input,
             int index, int[] arrayElements, int[] output)
         {
-            Setup(input, output);
-            InitialList(arrayElements);
+            IList actual = InitialList(input);
+            IList expected = InitialList(output);
+            IList listForAdd = InitialList(arrayElements);
 
-            actual.AddListByIndex(index, list);
+            actual.AddListByIndex(index, listForAdd);
 
             Assert.AreEqual(expected, actual);
         }
@@ -395,10 +385,11 @@ namespace ListsProject.Tests
                 int[] input,
                 int[] arrayElements, int[] output)
         {
-            Setup(input, output);
-            InitialList(arrayElements);
+            IList actual = InitialList(input);
+            IList expected = InitialList(output);
+            IList listForAdd = InitialList(arrayElements);
 
-            actual.AddListFirst(list);
+            actual.AddListFirst(listForAdd);
 
             Assert.AreEqual(expected, actual);
         }
@@ -410,10 +401,11 @@ namespace ListsProject.Tests
                 int[] input,
                 int[] arrayElements, int[] output)
         {
-            Setup(input, output);
-            InitialList(arrayElements);
+            IList actual = InitialList(input);
+            IList expected = InitialList(output);
+            IList listForAdd = InitialList(arrayElements);
 
-            actual.AddListLast(list);
+            actual.AddListLast(listForAdd);
 
             Assert.AreEqual(expected, actual);
         }
@@ -424,10 +416,10 @@ namespace ListsProject.Tests
         int[] input,
         int index, int[] arrayElements)
         {
-            Setup(input, input);
-            InitialList(arrayElements);
+            IList actual = InitialList(input);
+            IList listForAdd = InitialList(arrayElements);
 
-            Assert.Throws<IndexOutOfRangeException>(() => actual.AddListByIndex(index, list));
+            Assert.Throws<IndexOutOfRangeException>(() => actual.AddListByIndex(index, listForAdd));
         }
     }
 }

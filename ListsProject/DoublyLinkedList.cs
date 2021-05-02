@@ -126,10 +126,8 @@ namespace ListsProject
             {
                 throw new IndexOutOfRangeException();
             }
-
             DLNode tmp;
             int count;
-
             if (index <= this._length / 2 + 1) //UNDONE: make this part of code without if\else
             {
                 count = 0;
@@ -140,11 +138,9 @@ namespace ListsProject
                     {
                         return tmp;
                     }
-
                     count++;
                     tmp = tmp.Next;
-                }
-            }
+                }            }
             else
             {
                 count = _length - 1;
@@ -160,7 +156,6 @@ namespace ListsProject
                     tmp = tmp.Prev;
                 }
             }
-
             return tmp;
         }
         public override bool Equals(object obj)
